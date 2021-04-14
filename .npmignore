@@ -1,0 +1,11 @@
+src/
+test/
+.gitignore
+.babelrc
+.babelrc.js
+tsconfig.json
+public
+build
+desktop.ini
+.DS_Store
+.github

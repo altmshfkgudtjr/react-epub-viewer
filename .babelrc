@@ -1,0 +1,40 @@
+{
+  "presets": [
+		"@babel/preset-env",
+		[
+			"@babel/preset-react",
+			{
+				"runtime": "automatic"
+			}
+		],
+		"@babel/preset-typescript"
+  ],
+  "plugins": [
+		[
+			"module-resolver",
+			{
+				"root": "./src",
+				"extensions": [
+					".ts",
+					".tsx"
+				]
+			}
+		],
+    "@babel/plugin-proposal-class-properties",
+		"@babel/plugin-proposal-object-rest-spread",
+		"@babel/plugin-proposal-optional-chaining",
+		"babel-plugin-styled-components"
+  ],
+	"ignore": [
+		"src/components",
+		"src/containers",
+		"src/lib/hooks",
+		"src/lib/styles",
+		"src/lib/svg",
+		"src/slices",
+		"src/types",
+		"src/index.tsx",
+		"src/react-app-env.d.ts",
+		"src/setupTests.ts"
+	]
+}

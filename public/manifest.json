@@ -1,0 +1,15 @@
+{
+  "short_name": "React-Epub-Viewer",
+  "name": "React-Epub-Viewer Demo",
+  "icons": [
+    {
+      "src": "favicons/favicon_96x96.png",
+      "sizes": "96x96 48x48 24x24",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
