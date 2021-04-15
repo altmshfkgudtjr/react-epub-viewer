@@ -7,6 +7,40 @@ import Page from 'types/page'
 import ViewerLayout from 'types/viewerLayout'
 
 
+/**
+ * DOM Element wrapping the Epub viewer
+ * - Provides special methods.
+ */
+export interface ViewerRef extends HTMLDivElement {
+  /** Move the viewer to the previous page */
+  prevPage: () => void;
+  /** Move the viewer to the next page */
+  nextPage: () => void;
+  /** Get CFI in current page */
+  getCurrentCfi: () => string;
+  /**
+   * Highlighting specific CFIRange
+   * @param cfiRange CFIRange
+   * @param callback Callback after click highlight
+   * @param color Highlight color
+   */
+  onHighlight: (
+    cfiRange: string, 
+    callback: (e: any) => void,
+    color?: string
+  ) => void;
+  /**
+   * Remove specific highlight
+   * @param cfiRange CFIRange
+   */
+  offHighlight: (cfiRange: string) => void;
+  /**
+   * Move the viewer to the cfi or href
+   * @param location CFI or Href
+   */
+  setLocation: (location: string) => void;
+}
+
 /** 
  * Epub Viewer Props
  * @type
@@ -36,7 +70,7 @@ export interface EpubViewerProps {
   loadingView?: React.ReactNode;
 }
 
-declare class EpubViewer extends React.Component<EpubViewerProps> {}
+declare class EpubViewer extends React.Component<EpubViewerProps, ViewerRef> {}
 
 
 /** 
@@ -64,6 +98,6 @@ export interface ReactViewerProps {
   loadingView?: React.ReactNode;
 }
 
-declare class ReactEpubViewer extends React.Component<ReactViewerProps> {}
+declare class ReactEpubViewer extends React.Component<ReactViewerProps, ViewerRef> {}
 
 export { EpubViewer, ReactEpubViewer };
