@@ -1,6 +1,6 @@
 {
   "name": "@altmshfkgudtjr/react-epub-viewer",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "NB",
   "description": "Epub viewer for React.js powered by Epub.js",
   "license": "MIT",

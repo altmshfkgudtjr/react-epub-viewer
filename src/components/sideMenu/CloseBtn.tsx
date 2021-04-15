@@ -21,8 +21,9 @@ const Btn = styled.button`
   align-items: center;
   justify-content: center;
   transition: .1s ${styles.transition};
+  outline: none;
 
-  &:hover {
+  &:focus, &:hover {
     filter: invert(40%) sepia(85%) saturate(1256%) hue-rotate(210deg) brightness(113%) contrast(101%);
   }
 `;

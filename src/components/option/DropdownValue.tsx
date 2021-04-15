@@ -30,7 +30,7 @@ const Container = styled.button<{isDropdown: boolean}>`
   background-color: ${palette.white};
   border: ${({isDropdown}) => isDropdown
     ? `2px solid ${palette.blue3}`
-    : `2px solid ${palette.gray2}`
+    : `2px solid ${palette.gray1}`
   };
   border-radius: ${({isDropdown}) => isDropdown
     ? "20px 20px 0 0"
@@ -48,7 +48,8 @@ const Container = styled.button<{isDropdown: boolean}>`
     border: 2px solid ${palette.blue3};
 
     & > div {
-      opacity: .8;
+      opacity: 1;
+      filter: invert(40%) sepia(85%) saturate(1256%) hue-rotate(210deg) brightness(113%) contrast(101%);
     }
   }
 `;

@@ -20,13 +20,14 @@ const Content = styled.button`
   align-items: center;
   cursor: pointer;
   background-color: ${palette.gray0};
+  outline: none;
   
   & > span {
     transition: .2s ${styles.transition};
     font-size: 14px;
   }
 
-  &:hover {
+  &:focus, &:hover {
     & > span {
       color: ${palette.blue3};
       margin-left: 12px;

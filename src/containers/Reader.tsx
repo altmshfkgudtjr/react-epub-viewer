@@ -67,6 +67,8 @@ const Reader = ({ url, loadingView }: Props) => {
 		onUpdateHighlight
 	} = useHighlight(viewerRef, setIsContextMenu, bookStyle, bookOption.flow);
 
+
+
 	/**
 	 * Change Epub book information
 	 * @param book Epub Book Info
@@ -130,6 +132,8 @@ const Reader = ({ url, loadingView }: Props) => {
 	/** ContextMenu off */
 	const onContextmMenuRemove = () => setIsContextMenu(false);
 
+	
+	
   return (<>
     <ViewerWrapper>
       <Header 

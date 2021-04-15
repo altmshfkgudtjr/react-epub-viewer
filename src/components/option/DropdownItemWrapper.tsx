@@ -34,6 +34,10 @@ const Container = styled.div<{show: boolean}>`
     : 'translateY(-40px) scaleY(0);'
   };
   ${styles.scrollbar(6)}
+  ${({show}) => show
+    ? ''
+    : styles.noselect
+  };
 `;
 
 interface Props {

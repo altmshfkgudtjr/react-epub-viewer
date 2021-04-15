@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Book, Rendition, Contents } from "epubjs";
+import React, { useState, useEffect, useRef, useCallback } from "react"
+import { Book, Rendition, Contents } from "epubjs"
 import { debounce } from "throttle-debounce"
+// modules
+import EpubViewer from "modules/epubViewer/EpubViewer"
 // components
 import LoadingView from 'LoadingView'
-// modules
-import EpubViewer from "modules/epubViewer/EpubViewer";
 // utils
 import { timeFormatter } from 'lib/utils/commonUtil'
 // styles
@@ -95,7 +95,7 @@ const ReactViewer = ({
    * Viewer resizing function
    * @method
    */
-  const onResize = useCallback(() => {
+  const onResize = useCallback(debounce(250, () => {
     if (!rendition) return;
 
     const viewerLayout_ = viewerLayout || {
@@ -126,7 +126,7 @@ const ReactViewer = ({
     try {
       rendition.resize(w, h);
     } catch { }
-  }, [
+  }), [
     rendition,
     viewerLayout,
     bookStyle.marginHorizontal,
@@ -253,9 +253,8 @@ const ReactViewer = ({
 
   /** Emit screen resizing event */
   useEffect(() => {
-    // TODO debounce 해제 안되는 이슈 수정하기
-    window.addEventListener('resize', debounce(250, onResize));
-    return () => window.removeEventListener('resize', debounce(250, onResize));
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, [onResize]);
 
   /** Emit selection event */

@@ -74,6 +74,7 @@ const Slider = styled.input<{ active: boolean }>`
   border-radius: 6px;
   margin: 0;
   z-index: 2;
+  outline: none;
   
   &::-webkit-slider-thumb {
     appearance: none;
@@ -103,10 +104,15 @@ const Slider = styled.input<{ active: boolean }>`
     &:active {
       box-shadow: none;
       background-color: ${props => props.active
-        ? palette.blue0
+        ? palette.blue3
         : ''
       };
     }
+  }
+
+  &:focus::-webkit-slider-thumb {
+    box-shadow: none;
+    background-color: ${palette.blue3};
   }
 `;
 

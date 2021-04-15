@@ -5,7 +5,6 @@ import * as styles from 'lib/styles/styles'
 
 const Wrapper = styled.button`
   padding: 16px 24px;
-  box-shadow: 0 3px 6px 0 rgba(0,0,0,.3);
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -14,9 +13,10 @@ const Wrapper = styled.button`
   cursor: pointer;
   outline: none;
   text-align: left;
+  border-bottom: 1px solid ${palette.gray1};
   
-  &:last-child {
-    box-shadow: 0 1px 4px rgb(0 0 0 / 20%);
+  &:nth-child(2) {
+    border-top: 1px solid ${palette.gray1};
   }
 
   & > div {
