@@ -1,6 +1,20 @@
+import { useRef } from 'react'
 import ReactDOM from 'react-dom';
-import Reader from 'containers/Reader'
+import ReactEpubViewer from 'modules/reactViewer/ReactViewer'
+import { ViewerRef } from 'types'
 
-const EPUB_URL = "files/Alices Adventures in Wonderland.epub";
 
-ReactDOM.render(<Reader url={EPUB_URL} />,  document.getElementById('root'));
+const App = () => {
+	const EPUB_URL = "files/Alices Adventures in Wonderland.epub";
+	const ref = useRef<ViewerRef>(null);
+
+	return (
+		<ReactEpubViewer 
+			url={EPUB_URL}
+			ref={ref}
+		/>
+	);
+}
+
+
+ReactDOM.render(<App />,  document.getElementById('root'));
