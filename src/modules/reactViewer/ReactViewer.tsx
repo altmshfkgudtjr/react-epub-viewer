@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react"
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { Book, Rendition, Contents } from "epubjs"
 import { debounce } from "throttle-debounce"
 // modules
@@ -10,7 +10,7 @@ import { timeFormatter } from 'lib/utils/commonUtil'
 // styles
 import viewerDefaultStyles from 'modules/reactViewer/viewerStyle'
 // types
-import { ReactViewerProps } from 'types'
+import { ReactViewerProps, ViewerRef } from 'types'
 import BookType, { BookStyle, BookOption } from 'types/book'
 
 
@@ -39,7 +39,8 @@ const ReactViewer = ({
   onTocChange,
   onSelection,
   loadingView
-}: ReactViewerProps, ref: any) => {
+}: ReactViewerProps, ref: React.RefObject<ViewerRef> | any) => {
+  // TODO Fix the ref type correctly instead 'any' type.
   const [book, setBook] = useState<Book | null>(null);
 
   const [rendition, setRendition] = useState<Rendition | null>(null);
@@ -95,7 +96,7 @@ const ReactViewer = ({
    * Viewer resizing function
    * @method
    */
-  const onResize = useCallback(debounce(250, () => {
+  const onResize = useMemo(() => debounce(250, () => {
     if (!rendition) return;
 
     const viewerLayout_ = viewerLayout || {
@@ -149,6 +150,7 @@ const ReactViewer = ({
 		if (!iframeWin) return;
     
 		const selection_ = iframeWin.getSelection();
+    if (!selection_) return;
 		
 		const selectionText = selection_.toString();
 		if (selectionText === "") return;
@@ -165,6 +167,13 @@ const ReactViewer = ({
   }, [ref, onSelection]);
   
 
+
+  /** Ref checker */
+  useEffect(() => {
+    if (!ref) {
+      throw new Error("[React-Epub-Viewer] Put a ref argument that has a ViewerRef type.");
+    }
+  }, [ref]);
 
 	/** Epub parsing */
   // TODO Fix the infinite re-rendering issue, when inlcude `onBookInfoChange` to dependencies array.

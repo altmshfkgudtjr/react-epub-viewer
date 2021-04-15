@@ -3,7 +3,7 @@ import { Book, Rendition } from "epubjs";
 // style
 import EpubViewerWrapper from 'modules/epubViewer/style'
 // types
-import { EpubViewerProps } from 'types'
+import { EpubViewerProps, ViewerRef } from 'types'
 import Toc from 'types/toc'
 import Loc from 'types/loc'
 
@@ -37,7 +37,8 @@ const EpubViewer = ({
   tocChanged,
   selectionChanged,
   loadingView,
-}: EpubViewerProps, ref: any) => {
+}: EpubViewerProps, ref: React.RefObject<ViewerRef> | any) => {
+  // TODO Fix the ref type correctly instead 'any' type.
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [book, setBook] = useState<Book | null>(null);
@@ -229,11 +230,17 @@ const EpubViewer = ({
 
 
 
+  /** Ref checker */
+  useEffect(() => {
+    if (!ref) {
+      throw new Error("[React-Epub-Viewer] Put a ref argument that has a ViewerRef type.");
+    }
+  }, [ref]);
+
   /** Epub Init */
   /* eslint-disable */
   useEffect(() => {
     if (!url) return;
-
     initBook();
   }, [url]);
   /* eslint-enable */
@@ -275,7 +282,6 @@ const EpubViewer = ({
 
     rendition.display(location);
   }, [location, rendition]);
-
 
   
   return (<>

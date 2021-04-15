@@ -24,6 +24,7 @@ import 'lib/styles/readerStyle.css'
 import viewerLayout from 'lib/styles/viewerLayout'
 // types
 import { RootState } from 'slices'
+import { ViewerRef } from 'types'
 import Book, { BookStyle, BookOption } from 'types/book'
 import Page from 'types/page'
 import Toc from 'types/toc'
@@ -34,8 +35,8 @@ const Reader = ({ url, loadingView }: Props) => {
   const book = useSelector<RootState, Book>(state => state.book.book);	
 	const currentLocation = useSelector<RootState, Page>(state => state.book.currentLocation);
   
-	const viewerRef = useRef<any>(null);
-  const navRef = useRef<HTMLDivElement | null>(null);
+	const viewerRef = useRef<ViewerRef | null>(null);
+	const navRef = useRef<HTMLDivElement | null>(null);
   const optionRef = useRef<HTMLDivElement | null>(null);
   const learningRef = useRef<HTMLDivElement | null>(null);
 
