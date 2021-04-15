@@ -1,7 +1,10 @@
+[![Latest Stable Version](https://img.shields.io/npm/v/react-epub-viewer.svg?style=for-the-badge)](https://www.npmjs.com/package/react-epub-viewer) [![License](https://img.shields.io/badge/license-mit-red.svg?style=for-the-badge)](https://www.npmjs.com/package/react-epub-viewer) 
+
 # react-epub-viewer
+
 Epub Viewer for React.js powered by [Epub.js](https://github.com/futurepress/epub.js/)
 
-
+View [Demo Page](https://altmshfkgudtjr.github.io/react-epub-viewer/).
 
 
 
