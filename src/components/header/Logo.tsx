@@ -7,10 +7,10 @@ import { mediaQuery } from 'lib/styles/media'
 const Logo = () => {
 	return (
 		<Wrapper href="https://github.com/altmshfkgudtjr/react-epub-viewer" target="__blank__">
-			<Img src="/images/logo.png" alt="Logo" />
+			<Img src="/react-epub-viewer/images/logo.png" alt="Logo" />
 		</Wrapper>
 	);
-} 
+}
 
 const Wrapper = styled.a`
 	display: flex;
