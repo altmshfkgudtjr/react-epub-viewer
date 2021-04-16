@@ -2,6 +2,7 @@ import { useState } from 'react'
 // components
 import Wrapper from 'components/header/Wrapper'
 import Layout, { AutoLayout } from 'components/header/Layout'
+import Logo from 'components/header/Logo'
 import ControlBtn from 'components/header/ControlBtn'
 import ControlIconBtn from 'components/header/ControlIconBtn'
 import VerticalLine from 'components/header/VerticalLine'
@@ -72,6 +73,7 @@ const Header = ({
       <Layout>
         <AutoLayout>
           <div>
+            <Logo />
             <ControlBtn message="Contents" onClick={onNavToggle} />
             <ControlBtn message="Setting" onClick={onOptionToggle} />
             <ControlBtn message="Highlights" onClick={onLearningToggle} />
