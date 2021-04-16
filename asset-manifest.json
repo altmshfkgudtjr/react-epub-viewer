@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/altmshfkgudtjr/react-epub-viewer/static/css/main.597a1460.chunk.css",
-    "main.js": "/altmshfkgudtjr/react-epub-viewer/static/js/main.c61e69b2.chunk.js",
-    "main.js.map": "/altmshfkgudtjr/react-epub-viewer/static/js/main.c61e69b2.chunk.js.map",
-    "runtime-main.js": "/altmshfkgudtjr/react-epub-viewer/static/js/runtime-main.bc4b5efb.js",
-    "runtime-main.js.map": "/altmshfkgudtjr/react-epub-viewer/static/js/runtime-main.bc4b5efb.js.map",
-    "static/js/2.6a2eef53.chunk.js": "/altmshfkgudtjr/react-epub-viewer/static/js/2.6a2eef53.chunk.js",
-    "static/js/2.6a2eef53.chunk.js.map": "/altmshfkgudtjr/react-epub-viewer/static/js/2.6a2eef53.chunk.js.map",
-    "index.html": "/altmshfkgudtjr/react-epub-viewer/index.html",
-    "static/css/main.597a1460.chunk.css.map": "/altmshfkgudtjr/react-epub-viewer/static/css/main.597a1460.chunk.css.map",
-    "static/js/2.6a2eef53.chunk.js.LICENSE.txt": "/altmshfkgudtjr/react-epub-viewer/static/js/2.6a2eef53.chunk.js.LICENSE.txt"
+    "main.css": "/react-epub-viewer/static/css/main.597a1460.chunk.css",
+    "main.js": "/react-epub-viewer/static/js/main.c61e69b2.chunk.js",
+    "main.js.map": "/react-epub-viewer/static/js/main.c61e69b2.chunk.js.map",
+    "runtime-main.js": "/react-epub-viewer/static/js/runtime-main.b6681d7f.js",
+    "runtime-main.js.map": "/react-epub-viewer/static/js/runtime-main.b6681d7f.js.map",
+    "static/js/2.d2606707.chunk.js": "/react-epub-viewer/static/js/2.d2606707.chunk.js",
+    "static/js/2.d2606707.chunk.js.map": "/react-epub-viewer/static/js/2.d2606707.chunk.js.map",
+    "index.html": "/react-epub-viewer/index.html",
+    "static/css/main.597a1460.chunk.css.map": "/react-epub-viewer/static/css/main.597a1460.chunk.css.map",
+    "static/js/2.d2606707.chunk.js.LICENSE.txt": "/react-epub-viewer/static/js/2.d2606707.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.bc4b5efb.js",
-    "static/js/2.6a2eef53.chunk.js",
+    "static/js/runtime-main.b6681d7f.js",
+    "static/js/2.d2606707.chunk.js",
     "static/css/main.597a1460.chunk.css",
     "static/js/main.c61e69b2.chunk.js"
   ]
