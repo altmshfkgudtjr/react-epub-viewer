@@ -1,10 +1,9 @@
-<div align=left>
+<div align=center>
     <br />
-    <a href="https://github.com/altmshfkgudtjr/react-epub-viewer"><img src="https://user-images.githubusercontent.com/47492535/115000155-73a3ae80-9edd-11eb-8ae9-a19e1c012d35.png" alt="react_epub" style="zoom:50%;" /></a>
+    <a href="https://github.com/altmshfkgudtjr/react-epub-viewer"><img src="https://user-images.githubusercontent.com/47492535/115026922-02c0be80-9efe-11eb-8c0c-40379e3249d1.png" alt="react_epub" style="zoom:50%;" /></a>
     <br />
     <br />
 </div>
-
 
 # React-Epub-Viewer
 

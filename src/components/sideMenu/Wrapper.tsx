@@ -24,6 +24,7 @@ const Container = styled.div`
   flex-direction: column;
   position: fixed;
   width: 340px;
+  max-width: 95vw;
   height: 100vh;
   top: 0;
   right: 0;
@@ -33,9 +34,9 @@ const Container = styled.div`
   border-radius: 16px 0 0 16px;
   transform: ${({ show }: { show: boolean }) => show 
     ? `translateX(0px) scale(1)`
-    : `translateX(420px) scale(.8)`
+    : `translateX(420px) scale(.9)`
   };
-  transition: .3s ${styles.transition};
+  transition: .4s ${styles.transition};
   overflow-y: auto;
   ${styles.scrollbar()};
 `;
@@ -46,7 +47,7 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 30px;
+  padding-top: 4px;
 
   & > span {
     padding-left: 24px;

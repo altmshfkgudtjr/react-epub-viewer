@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux'
 // components
-import Wrapper from 'components/learning/highlight/Wrapper'
-import Title from 'components/learning/highlight/Title'
-import Post from 'components/learning/highlight/Post'
-import PageNum from 'components/learning/highlight/PageNum'
+import Wrapper from 'components/note/highlight/Wrapper'
+import Title from 'components/note/highlight/Title'
+import Post from 'components/note/highlight/Post'
+import PageNum from 'components/note/highlight/PageNum'
 // slices
 import { updateHighlight } from 'slices/book'
 // utils

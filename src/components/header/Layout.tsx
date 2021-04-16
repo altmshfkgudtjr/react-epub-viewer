@@ -9,8 +9,7 @@ const Layout = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 54px;
-  background-color: ${palette.white};
+  height: 64px;
   z-index: ${zIndex.header};
 `;
 

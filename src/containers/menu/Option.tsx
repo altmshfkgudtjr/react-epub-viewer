@@ -5,23 +5,33 @@ import Wrapper from 'components/sideMenu/Wrapper'
 import OptionLayout from 'components/option/Layout'
 import OptionDropdown from 'components/option/Dropdown'
 import OptionSlider from 'components/option/Slider'
+import ControlIconBtnWrapper from 'components/option/ControlIconBtnWrapper'
+import ControlIconBtn from 'components/option/ControlIconBtn'
 // types
 import { BookStyle, BookFontFamily, BookFlow } from 'types/book'
 import { MenuControl } from 'lib/hooks/useMenu'
+import { BookOption } from 'types/book'
 
 const Option = ({ 
   control, 
   bookStyle,
+  bookOption,
   bookFlow,
   onToggle, 
   emitEvent,
-  onBookStyleChange
+  onBookStyleChange,
+  onBookOptionChange
 }: Props, ref: any) => {
   const [fontFamily, setFontFamily] = useState<BookFontFamily>(bookStyle.fontFamily);
   const [fontSize, setFontSize] = useState<number>(bookStyle.fontSize);
   const [lineHeight, setLineHeight] = useState<number>(bookStyle.lineHeight);
   const [marginHorizontal, setMarginHorizontal] = useState<number>(bookStyle.marginHorizontal);
   const [marginVertical, setMarginVertical] = useState<number>(bookStyle.marginVertical);
+  const [isScrollHorizontal, setIsScrollHorizontal] = useState<boolean>(true);
+  const [viewType, setViewType] = useState<ViewType>({
+    active: true,
+    spread: true
+  });
 
 
   /** Change font family */
@@ -45,6 +55,48 @@ const Option = ({
         break;
       default:
         break;
+    }
+  }
+
+  /** 
+   * Select view direction
+   * @param type Direction
+   */
+   const onClickDirection = (type: "Horizontal" | "Vertical") => {
+    if (type === "Horizontal") {
+      setIsScrollHorizontal(true);
+      setViewType({ ...viewType, active: true });
+      onBookOptionChange({
+        ...bookOption,
+        flow: "paginated"
+      });
+    } else {
+      setIsScrollHorizontal(false);
+      setViewType({ ...viewType, active: false });
+      onBookOptionChange({
+        ...bookOption,
+        flow: "scrolled-doc"
+      });
+    }
+  }
+
+  /**
+   * Select isSpread
+   * @param isSpread Whether spread view 
+   */
+  const onClickViewType = (isSpread: boolean) => {
+    if (isSpread) {
+      setViewType({ ...viewType, spread: true });
+      onBookOptionChange({
+        ...bookOption,
+        spread: "auto"
+      });
+    } else {
+      setViewType({ ...viewType, spread: false });
+      onBookOptionChange({
+        ...bookOption,
+        spread: "none"
+      });
     }
   }
 
@@ -83,6 +135,30 @@ const Option = ({
                                  onClose={onToggle}
                                  ref={ref}>
       <OptionLayout>
+        <ControlIconBtnWrapper title="View Direction">
+          <ControlIconBtn type="ScrollHorizontal"
+                          alt="Horizontal View"
+                          active={true}
+                          isSelected={isScrollHorizontal}
+                          onClick={() => onClickDirection("Horizontal")} />
+          <ControlIconBtn type="ScrollVertical" 
+                          alt="Vertical View"
+                          active={true}
+                          isSelected={!isScrollHorizontal}
+                          onClick={() => onClickDirection("Vertical")} />
+        </ControlIconBtnWrapper>
+        <ControlIconBtnWrapper title="View Spread">
+          <ControlIconBtn type="BookOpen" 
+                          alt="Two Page View"
+                          active={viewType.active}
+                          isSelected={viewType.spread}
+                          onClick={() => onClickViewType(true)} />
+          <ControlIconBtn type="BookClose" 
+                          alt="One Page View"
+                          active={viewType.active}
+                          isSelected={!viewType.spread}
+                          onClick={() => onClickViewType(false)} />
+        </ControlIconBtnWrapper>
         <OptionDropdown title="Font"
                         defaultValue={fontFamily}
                         valueList={["Origin", "Roboto"]}
@@ -123,15 +199,22 @@ const Option = ({
 interface Props {
   control: MenuControl;
   bookStyle: BookStyle;
+  bookOption: BookOption;
   bookFlow: BookFlow;
   onToggle: () => void;
   emitEvent: () => void;
   onBookStyleChange: (bookStyle: BookStyle) => void;
+  onBookOptionChange: (bookOption: BookOption) => void;
 }
 
 type SliderType = "FontSize" 
   | "LineHeight" 
   | "MarginHorizontal" 
   | "MarginVertical";
+
+type ViewType = {
+  active: boolean,
+  spread: boolean
+}
 
 export default React.forwardRef(Option)

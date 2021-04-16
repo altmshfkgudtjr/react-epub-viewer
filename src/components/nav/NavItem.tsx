@@ -33,6 +33,10 @@ const Content = styled.button`
       margin-left: 12px;
     }
   }
+
+  &:last-child {
+    margin-bottom: 32px;
+  }
 `;
 
 interface Props {

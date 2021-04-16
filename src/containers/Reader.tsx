@@ -32,7 +32,6 @@ import Toc from 'types/toc'
 
 const Reader = ({ url, loadingView }: Props) => {
   const dispatch = useDispatch();
-  const book = useSelector<RootState, Book>(state => state.book.book);	
 	const currentLocation = useSelector<RootState, Page>(state => state.book.currentLocation);
   
 	const viewerRef = useRef<ViewerRef | null>(null);
@@ -138,12 +137,9 @@ const Reader = ({ url, loadingView }: Props) => {
   return (<>
     <ViewerWrapper>
       <Header 
-				title={book.title}
-				bookOption={bookOption}
 				onNavToggle={onNavToggle}
 				onOptionToggle={onOptionToggle}
 				onLearningToggle={onLearningToggle}
-				onBookOptionChange={onBookOptionChange}
 			/>
 
       <Viewer 
@@ -177,10 +173,12 @@ const Reader = ({ url, loadingView }: Props) => {
     <Option 
 			control={optionControl}
 			bookStyle={bookStyle}
+			bookOption={bookOption}
 			bookFlow={bookOption.flow}
 			onToggle={onOptionToggle} 
 			emitEvent={emitEvent}
 			onBookStyleChange={onBookStyleChange}
+			onBookOptionChange={onBookOptionChange}
 			ref={optionRef}
 		/>
 

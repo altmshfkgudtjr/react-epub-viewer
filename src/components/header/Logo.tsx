@@ -2,11 +2,12 @@ import styled from 'styled-components'
 // lib
 import * as styles from 'lib/styles/styles'
 import palette from 'lib/styles/palette'
+import { mediaQuery } from 'lib/styles/media'
 
 const Logo = () => {
 	return (
 		<Wrapper href="https://github.com/altmshfkgudtjr/react-epub-viewer" target="__blank__">
-			<Img src="react-epub-viewer/images/reactEpubIcon.png" alt="Logo" />
+			<Img src="/images/logo.png" alt="Logo" />
 		</Wrapper>
 	);
 } 
@@ -18,18 +19,22 @@ const Wrapper = styled.a`
 	outline: none;
 	margin-left: 16px;
 	background-color: rgba(0,0,0,0);
-	transition: .3s ${styles.transition};
+	transition: .2s ${styles.transition};
 	border-radius: 8px;
 	padding: 4px 8px;
 	cursor: pointer;
 
+	${mediaQuery(700)} {
+		display: none;
+	}
+
 	&:focus, &:hover {
-		background-color: ${palette.blue1};
+		background-color: ${palette.blue0};
 	}
 `;
 
 const Img = styled.img`
-	height: 32px;
+	height: 44px;
 `;
 
 export default Logo
