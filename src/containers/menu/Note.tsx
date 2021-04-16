@@ -56,8 +56,6 @@ const Note = ({
   </>);
 }
 
-type Sorted = "LOOK" | "CART"
-
 interface Props {
   control: MenuControl;
   onToggle: () => void;
