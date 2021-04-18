@@ -5,7 +5,7 @@ import { ViewerRef } from 'types'
 
 
 const App = () => {
-	const EPUB_URL = "files/Alices Adventures in Wonderland.epub";
+	const EPUB_URL = "/react-epub-viewer/files/Alices Adventures in Wonderland.epub";
 	const ref = useRef<ViewerRef>(null);
 
 	return (

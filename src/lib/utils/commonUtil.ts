@@ -199,3 +199,21 @@ export const getSelectionPosition = (
 		width: selectionWidth 
 	};
 }
+
+/**
+ * Debounce
+ * @param func Target function
+ * @param timeout delay
+ */
+export function debounce<Params extends any[]>(
+  timeout: number,
+  func: (...args: Params) => any,
+): (...args: Params) => void {
+  let timer: NodeJS.Timeout
+  return (...args: Params) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      func(...args)
+    }, timeout)
+  }
+}
