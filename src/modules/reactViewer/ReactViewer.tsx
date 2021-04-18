@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { Book, Rendition, Contents } from "epubjs"
-import { debounce } from "throttle-debounce"
 // modules
 import EpubViewer from "modules/epubViewer/EpubViewer"
 // components
 import LoadingView from 'LoadingView'
 // utils
-import { timeFormatter } from 'lib/utils/commonUtil'
+import { debounce, timeFormatter } from 'lib/utils/commonUtil'
 // styles
 import viewerDefaultStyles from 'modules/reactViewer/viewerStyle'
 // types

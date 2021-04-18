@@ -38,12 +38,12 @@ const Container = styled.div`
   };
   transition: .4s ${styles.transition};
   overflow-y: auto;
-  ${styles.scrollbar()};
+  ${styles.scrollbar(0)};
 `;
 
 const Header = styled.div`
   width: 100%;
-  height: 64px;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
