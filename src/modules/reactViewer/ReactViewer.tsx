@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
+import React, { 
+  useState, 
+  useEffect, 
+  useRef, 
+  useCallback, 
+  useMemo
+} from "react"
 import { Book, Rendition, Contents } from "epubjs"
 // modules
 import EpubViewer from "modules/epubViewer/EpubViewer"

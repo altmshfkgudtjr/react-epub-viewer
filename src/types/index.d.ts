@@ -60,7 +60,7 @@ export interface EpubViewerProps {
   url: string;
   epubFileOptions?: BookOptions;
   epubOptions?: RenditionOptions;
-  style?: Object;
+  style?: React.CSSProperties;
   location?: string;
   bookChanged?(book: Book): void;
   rendtionChanged?(rendition: Rendition): void;

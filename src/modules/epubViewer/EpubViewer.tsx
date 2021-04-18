@@ -1,7 +1,13 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { 
+  useState, 
+  useEffect, 
+  useCallback, 
+  useRef,
+  CSSProperties
+} from 'react'
 import { Book, Rendition } from "epubjs";
 // style
-import EpubViewerWrapper from 'modules/epubViewer/style'
+import styles from 'modules/epubViewer/styles'
 // types
 import { EpubViewerProps, ViewerRef } from 'types'
 import Toc from 'types/toc'
@@ -39,6 +45,8 @@ const EpubViewer = ({
   loadingView,
 }: EpubViewerProps, ref: React.RefObject<ViewerRef> | any) => {
   // TODO Fix the ref type correctly instead 'any' type.
+  const viewerStyle: CSSProperties = style ? { ...styles, ...style} : styles;
+
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [book, setBook] = useState<Book | null>(null);
@@ -286,7 +294,7 @@ const EpubViewer = ({
   
   return (<>
     {!isLoaded && loadingView}
-    <EpubViewerWrapper ref={ref} style={style} />
+    <div ref={ref} style={viewerStyle} />
   </>);
 }
 
