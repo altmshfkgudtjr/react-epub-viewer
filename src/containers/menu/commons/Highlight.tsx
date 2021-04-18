@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import Wrapper from 'components/note/highlight/Wrapper'
 import Title from 'components/note/highlight/Title'
 import Post from 'components/note/highlight/Post'
-import PageNum from 'components/note/highlight/PageNum'
 // slices
 import { updateHighlight } from 'slices/book'
 // utils
@@ -50,8 +49,6 @@ const Highlight = ({
   
   return (
     <Wrapper onClick={onClickHighlight}>
-      <PageNum num={highlight.pageNum} />
-
       <div>
         <Title>{highlight.chpaterName}</Title>
 
