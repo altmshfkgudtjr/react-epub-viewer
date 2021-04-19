@@ -96,9 +96,9 @@ You can see also Types for React-Epub-Viewer [here](https://github.com/altmshfkg
 
 ### EpubViewer Props
 
-- `ref` [RefObject] Viewer Ref
+- `ref` - [RefObject] Viewer Ref
 
-- `url` [string] - Epub file path
+- `url` - [string] - Epub file path
 - `epubFileOptions` - [[object](http://epubjs.org/documentation/0.3/#book)] Epub file option (Epub.js BookOption)
 - `epubOptions` - [[object](http://epubjs.org/documentation/0.3/#rendition)] Epub viewer option (Epub.js RenditionOption)
 - `style` - [object] Epub wrapper style
@@ -114,9 +114,9 @@ You can see also Types for React-Epub-Viewer [here](https://github.com/altmshfkg
 
 ### ReactEpubViewer Props
 
-- `ref` [RefObject] Viewer Ref
+- `ref` - [RefObject] Viewer Ref
 
-- `url` [string] - Epub file path
+- `url` - [string] Epub file path
 - `viewerLayout` - [object] Viewer layout values (header height, footer height, etc...)
 - `viewerOption` - [object] Viewer option (whether is flow or is spread)
 - `onBookInfoChange` - [function] Run when book information changed
