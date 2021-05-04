@@ -35,3 +35,12 @@ a {
 #root {
 	height : 100%;
 }
+
+.epub-container {
+	overflow-x: hidden !important;
+}
+
+.epub-container::-webkit-scrollbar {
+	width: 0px;
+	background: transparent;
+}

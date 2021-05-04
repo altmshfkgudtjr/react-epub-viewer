@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/react-epub-viewer/static/css/main.597a1460.chunk.css",
-    "main.js": "/react-epub-viewer/static/js/main.44600570.chunk.js",
-    "main.js.map": "/react-epub-viewer/static/js/main.44600570.chunk.js.map",
+    "main.css": "/react-epub-viewer/static/css/main.31569a8e.chunk.css",
+    "main.js": "/react-epub-viewer/static/js/main.c513ca6f.chunk.js",
+    "main.js.map": "/react-epub-viewer/static/js/main.c513ca6f.chunk.js.map",
     "runtime-main.js": "/react-epub-viewer/static/js/runtime-main.b6681d7f.js",
     "runtime-main.js.map": "/react-epub-viewer/static/js/runtime-main.b6681d7f.js.map",
-    "static/js/2.262d486a.chunk.js": "/react-epub-viewer/static/js/2.262d486a.chunk.js",
-    "static/js/2.262d486a.chunk.js.map": "/react-epub-viewer/static/js/2.262d486a.chunk.js.map",
+    "static/js/2.3ba59180.chunk.js": "/react-epub-viewer/static/js/2.3ba59180.chunk.js",
+    "static/js/2.3ba59180.chunk.js.map": "/react-epub-viewer/static/js/2.3ba59180.chunk.js.map",
     "index.html": "/react-epub-viewer/index.html",
-    "static/css/main.597a1460.chunk.css.map": "/react-epub-viewer/static/css/main.597a1460.chunk.css.map",
-    "static/js/2.262d486a.chunk.js.LICENSE.txt": "/react-epub-viewer/static/js/2.262d486a.chunk.js.LICENSE.txt"
+    "static/css/main.31569a8e.chunk.css.map": "/react-epub-viewer/static/css/main.31569a8e.chunk.css.map",
+    "static/js/2.3ba59180.chunk.js.LICENSE.txt": "/react-epub-viewer/static/js/2.3ba59180.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.b6681d7f.js",
-    "static/js/2.262d486a.chunk.js",
-    "static/css/main.597a1460.chunk.css",
-    "static/js/main.44600570.chunk.js"
+    "static/js/2.3ba59180.chunk.js",
+    "static/css/main.31569a8e.chunk.css",
+    "static/js/main.c513ca6f.chunk.js"
   ]
 }
