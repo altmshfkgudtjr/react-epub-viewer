@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Provider } from 'react-redux'
+import { ReactEpubViewer } from 'react-epub-viewer'
 // containers
-import Viewer from 'modules/reactViewer/ReactViewer'
 import Header from 'containers/Header'
 import Footer from 'containers/Footer'
 import Nav from 'containers/menu/Nav'
@@ -34,7 +34,7 @@ const Reader = ({ url, loadingView }: Props) => {
   const dispatch = useDispatch();
 	const currentLocation = useSelector<RootState, Page>(state => state.book.currentLocation);
   
-	const viewerRef = useRef<ViewerRef | null>(null);
+	const viewerRef = useRef<ViewerRef | any>(null);
 	const navRef = useRef<HTMLDivElement | null>(null);
   const optionRef = useRef<HTMLDivElement | null>(null);
   const learningRef = useRef<HTMLDivElement | null>(null);
@@ -142,7 +142,7 @@ const Reader = ({ url, loadingView }: Props) => {
 				onLearningToggle={onLearningToggle}
 			/>
 
-      <Viewer 
+      <ReactEpubViewer 
 				url={url}
 				viewerLayout={viewerLayout}
 				viewerStyle={bookStyle}

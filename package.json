@@ -40,7 +40,8 @@
     "postcompile": "cp -r ./src/types ./lib/types"
   },
   "dependencies": {
-    "epubjs": "^0.3.88"
+    "epubjs": "^0.3.88",
+    "react-epub-viewer": "^0.1.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.14",
