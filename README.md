@@ -135,3 +135,7 @@ You can see also Types for React-Epub-Viewer [here](https://github.com/altmshfkg
 
 
 
+# Contribuing
+
+If you would like to contribute, please follow the [guideline](https://github.com/altmshfkgudtjr/react-epub-viewer/blob/main/CONTRIBUTING.md)! Thank you! 😀
+
