@@ -1,0 +1,18 @@
+# Please write in this format
+# <Type> : <Title>
+
+################
+# Write body
+
+################
+# Write footer or issue number
+
+################
+# feature : New feature
+# fix : Fix bug
+# docs : Fix docs
+# test : Mofiy test code
+# refactor : Refactoring code
+# style : Changes that don't affect code semantics
+# chore : Build parts or package manager modifications
+################
