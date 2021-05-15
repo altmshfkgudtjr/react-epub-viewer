@@ -53,83 +53,7 @@ const EpubViewer = ({
 
   const [rendition, setRendition] = useState<Rendition | null>(null);
 
-  const [toc, setToc] = useState<Toc[]>([]);
-
   const currentCfi = useRef<string>('');
-
-  
-
-  /**
-   * Init Book
-   * @method
-   * - Set book state
-   * - Set Epub path state
-   * - Set isLoaded state
-   * - Set toc state
-   */
-  const initBook = () => {
-    if (book) {
-      book.destroy();
-    }
-    
-    const book_ = new Book(url, epubFileOptions);
-    setBook(book_);
-
-    bookChanged && bookChanged(book_);
-
-    book_.loaded.navigation.then(({ toc }) => {
-      const toc_: Toc[] = toc.map(t => ({ 
-        label: t.label, 
-        href: t.href 
-      }));
-      
-      setIsLoaded(true);
-      setToc(toc_);
-      tocChanged && tocChanged(toc_);
-      initRendition(book_);
-    });
-
-    // Init Location & Pagination
-    book_.ready.then(function() {
-      const stored = localStorage.getItem(book_.key() + '-locations');
-      if (stored) {
-          return book_.locations.load(stored);
-      } else {
-          return book_.locations.generate(1024);
-      }
-    }).then(() => {
-      localStorage.setItem(book_.key() + '-locations', book_.locations.save());
-    });
-  };
-
-  /**
-   * Init Rendition
-   * @method
-   * - Init iframe tag on DOM element
-   * - Set rendition
-   * - Set start page
-   */
-  const initRendition = (book_: Book) => {
-    const node = ref.current;
-    if (!node || !book_) return;
-    
-    const rendition_ = book_.renderTo(node, {
-      width: "100%",
-      height: "100%",
-      ...epubOptions
-    });
-    setRendition(rendition_);
-    
-    rendtionChanged && rendtionChanged(rendition_);
-
-    if(typeof location === "string") {
-      rendition_.display(location);
-    } else if(toc.length > 0 && toc[0].href) {
-      rendition_.display(toc[0].href);
-    } else {
-      rendition_.display();
-    }
-  }
 
   /**
    * Move page
@@ -238,20 +162,114 @@ const EpubViewer = ({
 
 
 
-  /** Ref checker */
+  /** Ref Checker */
   useEffect(() => {
     if (!ref) {
       throw new Error("[React-Epub-Viewer] Put a ref argument that has a ViewerRef type.");
     }
   }, [ref]);
 
-  /** Epub Init */
-  /* eslint-disable */
+  /** Epub init options Changed */
   useEffect(() => {
     if (!url) return;
-    initBook();
-  }, [url]);
-  /* eslint-enable */
+    
+    let mounted: boolean = true;
+    let book_: Book | any = null;
+
+    if (!mounted) return;
+    
+    if (book_) {
+      book_.destroy();
+    }
+    
+    book_ = new Book(url, epubFileOptions);
+    setBook(book_);
+
+    return () => {
+      mounted = false;
+    }
+  }, [url, epubFileOptions, setBook, setIsLoaded]);
+
+  /** Book Changed */
+  useEffect(() => {
+    if (!book) return;
+
+    if (bookChanged) bookChanged(book);
+
+    book.loaded.navigation.then(({ toc }) => {
+      const toc_: Toc[] = toc.map(t => ({ 
+        label: t.label, 
+        href: t.href 
+      }));
+      
+      setIsLoaded(true);
+      if (tocChanged) tocChanged(toc_);
+    });
+
+    book.ready.then(function() {
+      if (!book) return;
+      
+      const stored = localStorage.getItem(book.key() + '-locations');
+      if (stored) {
+          return book.locations.load(stored);
+      } else {
+          return book.locations.generate(1024);
+      }
+    }).then(() => {
+      if (!book) return;
+      localStorage.setItem(book.key() + '-locations', book.locations.save());
+    });
+  }, [book, bookChanged, tocChanged]);
+
+  /** Rendition Changed */
+  useEffect(() => {
+    if (!rendition) return;
+
+    if (rendtionChanged) rendtionChanged(rendition);
+  }, [rendition, rendtionChanged]);
+
+  /** Viewer Option Changed */
+  useEffect(() => {
+    let mounted = true;
+    if (!book) return;
+    
+    const node = ref.current;
+    if (!node) return;
+    node.innerHTML = "";
+
+    book.ready.then(function() {
+      if (!mounted) return;
+      
+      if (book.spine) {
+        const loc = book.rendition?.location?.start?.cfi;
+
+        // if (book.rendition) book.rendition.destroy();
+
+        const rendition_ = book.renderTo(node, {
+          width: "100%",
+          height: "100%",
+          ...epubOptions
+        });
+        setRendition(rendition_);
+
+        if(loc) {
+          rendition_.display(loc)
+        } else {
+          rendition_.display();
+        }
+      } 
+    });
+
+    return () => {
+      mounted = false;
+    }
+  }, [ref, book, epubOptions, style, setRendition]);
+
+  /** Location Changed */
+  useEffect(() => {
+    if (!ref.current || !location) return;
+    if (ref.current.setLocation) ref.current.setLocation(location);
+  }, [ref, location]);
 
   /** 
    * Emit Viewer Event
@@ -284,14 +302,6 @@ const EpubViewer = ({
   ]);
   /* eslint-enable */
 
-  /** Display page by changed location */
-  useEffect(() => {
-    if (!location || !rendition) return;
-
-    rendition.display(location);
-  }, [location, rendition]);
-
-  
   return (<>
     {!isLoaded && loadingView}
     <div ref={ref} style={viewerStyle} />

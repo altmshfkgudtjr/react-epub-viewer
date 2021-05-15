@@ -50,14 +50,14 @@ const ReactViewer = ({
 
   const [rendition, setRendition] = useState<Rendition | null>(null);
 
-  const [layoutStyle, setLayoutStyle] = useState<Object>({});
+  const [layoutStyle, setLayoutStyle] = useState<{[key: string]: any}>({});
 
   const [bookStyle, setBookStyle] = useState<BookStyle>({
     fontFamily: 'Origin',
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 1.4,
-    marginHorizontal: 15,
-    marginVertical: 5
+    marginHorizontal: 0,
+    marginVertical: 0
   });
   
   const [bookOption, setBookOption] = useState<BookOption>({
@@ -71,8 +71,6 @@ const ReactViewer = ({
     contents: null
   });
   
-
-
   /**
    * Run book changed
    * @method
@@ -118,17 +116,23 @@ const ReactViewer = ({
     const h = bookOption.flow === "scrolled-doc"
       ? win_h - componentHeight
       : win_h - componentHeight - ~~((win_h - componentHeight - viewerLayout_.MIN_VIEWER_HEIGHT) / 100 * bookStyle.marginVertical);
-    const marginTop = bookOption.flow === "scrolled-doc"
+    const marginVertical = bookOption.flow === "scrolled-doc"
       ? ""
       : `${~~((win_h - componentHeight - viewerLayout_.MIN_VIEWER_HEIGHT) / 100 * bookStyle.marginVertical) / 2}px`;
 
-    setLayoutStyle(l => ({
-      ...l,
-      width: w,
-      height: h,
-      marginTop
-    }));
-    
+    setLayoutStyle(layout => {
+      if (layout.width !== w || layout.height !== h || layout.marginTop !== marginVertical) {
+        return {
+          ...layout,
+          width: w,
+          height: h,
+          marginTop: marginVertical,
+          marginBottom: marginVertical
+        };
+      }
+      return layout;
+    });
+
     try {
       rendition.resize(w, h);
     } catch { }
@@ -212,8 +216,8 @@ const ReactViewer = ({
 
   /** Set viewer Styles/Options */
   useEffect(() => {
-    viewerStyle && setBookStyle(viewerStyle);
-    viewerOption && setBookOption(viewerOption);
+    viewerStyle && setBookStyle(v => ({ ...v, ...viewerStyle }));
+    viewerOption && setBookOption(v => ({ ...v, ...viewerOption }));
   }, [viewerStyle, viewerOption]);
 
   /** Apply viewer Styles/Options */
@@ -277,7 +281,6 @@ const ReactViewer = ({
     rendition.on("mouseup", onSelected);
 		return () => rendition.off("mouseup", onSelected);
   }, [rendition, onSelected]);
-
   
 
   return (<>
