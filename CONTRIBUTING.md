@@ -22,7 +22,8 @@ First open an issue and let us know what you're contributing to!
 2. Open a terminal and navigate to your project path. And enter this.
 **`git config --global commit.template .gitmessage.txt`**
 3. You can use the template, with `git commit` through vi. **Not** `git commit -m`
-4. Enjoy contributing!
+4. If you want to merge your work, please pull request to the `dev` branch 
+5. Enjoy contributing!
 
 
 ---
