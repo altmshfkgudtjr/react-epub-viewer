@@ -9523,9 +9523,9 @@ react-dom@^17.0.2:
     scheduler "^0.20.2"
 
 react-epub-viewer@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/react-epub-viewer/-/react-epub-viewer-0.1.7.tgz#4360bdb4ca3f7e0df22b813d4323ae1290be2f60"
-  integrity sha512-QWEi0GxDCGOCONC3GNsLP4K6KU23c9SuW55U/5C2rzWnJuTVWrx4d3qivqwTH+ypMhJ0UXG4+xxUSdz1dZbtqw==
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/react-epub-viewer/-/react-epub-viewer-0.1.8.tgz#55b4bcb6f6c4007d931f1d3b0b1f2619ea798798"
+  integrity sha512-Qm5/PIsDiJ2R8010x8V2j21vSvcO0HklRPqpk9rA2JeeX4pIvVpay0ObDtuThETrQHMP69o6JFwXmqMQuqb7+g==
   dependencies:
     epubjs "^0.3.88"
 
