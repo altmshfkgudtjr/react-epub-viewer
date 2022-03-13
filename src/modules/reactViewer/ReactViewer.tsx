@@ -26,6 +26,7 @@ import BookType, { BookStyle, BookOption } from 'types/book'
  * @param props.url Epub file path
  * @param props.viewerLayout Viewer layout
  * @param props.viewerStyle Viewer style
+ * @param props.viewerStyleURL Viwer style - CSS URL
  * @param props.viewerOption Viewer option
  * @param props.onBookInfoChange Run when book information changed
  * @param props.onPageChange Run when page changed
@@ -38,6 +39,7 @@ const ReactViewer = ({
   url,
   viewerLayout,
   viewerStyle,
+	viewerStyleURL,
   viewerOption,
   onBookInfoChange,
   onPageChange,
@@ -227,9 +229,11 @@ const ReactViewer = ({
     onResize();
 
     const newStyle = {
+			...viewerDefaultStyles,
       "body": {
         "padding-top": "0px !important",
-        "padding-bottom": "0px !important"
+        "padding-bottom": "0px !important",
+				"font-size": `${bookStyle.fontSize}px !important`
       },
       "p": {
         "font-size": `${bookStyle.fontSize}px !important`,
@@ -255,16 +259,22 @@ const ReactViewer = ({
     } else {                                    // View 1 page
       Object.assign(newStyle.body, { });
     }
-  
-    rendition.themes.register("main", viewerDefaultStyles);
+
+		if (!!viewerStyleURL) {
+			rendition.themes.registerUrl('main', viewerStyleURL);
+		}
+
     rendition.themes.register("default", newStyle);
 
-    rendition.themes.select("main");
+		rendition.themes.select("main");
+
+		console.log(rendition.themes);
   }, [
     rendition, 
     bookStyle.fontFamily,
     bookStyle.fontSize,
     bookStyle.lineHeight,
+		viewerStyleURL,
     bookOption,
     onResize
   ]);

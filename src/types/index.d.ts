@@ -5,6 +5,7 @@ import { Contents, Rendition } from "epubjs";
 import Toc from 'types/toc'
 import Page from 'types/page'
 import ViewerLayout from 'types/viewerLayout'
+import BookType, { BookStyle, BookOption } from 'types/book'
 
 
 /**
@@ -79,6 +80,7 @@ declare class EpubViewer extends React.Component<EpubViewerProps, ViewerRef> {}
  * @param url Epub file path
  * @param viewerLayout Viewer layout
  * @param viewerStyle Viewer style
+ * @param viewerStyleURL Viewer style - CSS URL
  * @param viewerOption Viewer option
  * @param onBookInfoChange Run when book information changed
  * @param onPageChange Run when page changed
@@ -90,6 +92,7 @@ export interface ReactViewerProps {
   url: string;
   viewerLayout?: ViewerLayout;
   viewerStyle?: BookStyle;
+	viewerStyleURL?: string;
   viewerOption?: BookOption;
   onBookInfoChange?: (book: BookType) => void;
   onPageChange?: (page: Page) => void;
