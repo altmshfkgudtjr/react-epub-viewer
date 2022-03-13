@@ -27,7 +27,7 @@ export interface ViewerRef extends HTMLDivElement {
    */
   onHighlight: (
     cfiRange: string, 
-    callback: (e: any) => void,
+    callback?: (e: any) => void,
     color?: string
   ) => void;
   /**

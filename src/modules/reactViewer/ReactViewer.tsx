@@ -267,8 +267,6 @@ const ReactViewer = ({
     rendition.themes.register("default", newStyle);
 
 		rendition.themes.select("main");
-
-		console.log(rendition.themes);
   }, [
     rendition, 
     bookStyle.fontFamily,

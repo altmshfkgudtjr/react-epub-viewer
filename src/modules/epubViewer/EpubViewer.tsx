@@ -113,13 +113,13 @@ const EpubViewer = ({
 
   /**
    * Highlight function
-   * @param cfiRange Selecton CFIRange
-   * @param color Highlight color
+   * @param cfiRange Selected CFIRange
    * @param callback Highlight callback function when click it
+   * @param color Highlight color
    */
    const onHighlight = useCallback((
     cfiRange: string, 
-    callback: (e: any) => void,
+    callback?: (e: any) => void,
     color?: string
   ) => {
     if (!rendition) return;
@@ -133,6 +133,16 @@ const EpubViewer = ({
       { 'fill': color || '#fdf183' }
     );
   }, [rendition]);
+	
+	/**
+	 * Highlight remove function
+	 * @param cfiRange Selected CFIRange
+	 */
+	const onRemoveHighlight = useCallback((cfiRange: string) => {
+		if (!rendition) return;
+
+		rendition.annotations.remove(cfiRange, 'highlight');
+	}, [rendition]);
 
   /**
    * Register viewer control function
@@ -154,11 +164,13 @@ const EpubViewer = ({
     if (onHighlight) {
       ref.current.onHighlight = onHighlight;
     }
+		if (onRemoveHighlight) {
+			ref.current.offHighlight = onRemoveHighlight;
+		}
     if (rendition) {
-      ref.current.offHighlight = (cfiRange: string) => rendition.annotations.remove(cfiRange, 'highlight');
       ref.current.setLocation = (location: string) => rendition.display(location);
     }
-  }, [ref, rendition, movePage, onHighlight]);
+  }, [ref, rendition, movePage, onHighlight, onRemoveHighlight]);
 
 
 
