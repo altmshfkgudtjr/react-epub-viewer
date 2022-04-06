@@ -1,7 +1,6 @@
 import { useRef } from 'react'
 import ReactDOM from 'react-dom';
-import EpubViewer from 'modules/epubViewer/EpubViewer'
-import ReactEpubViewer from 'modules/reactViewer/ReactViewer'
+import { EpubViewer, ReactEpubViewer } from 'modules';
 import { ViewerRef } from 'types'
 
 interface Props {
