@@ -22,7 +22,10 @@ You can use React-Epub-Viewer together with React.
 
 ## Getting Started
 
-📢 **[Online demo](https://altmshfkgudtjr.github.io/react-epub-viewer)**
+📢 **[Online Demo](https://altmshfkgudtjr.github.io/react-epub-viewer)**
+👉 You can check the **[Demo Code](https://github.com/altmshfkgudtjr/react-epub-viewer/tree/demo)**
+
+
 
 **Features**
 
