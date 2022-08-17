@@ -1,5 +1,5 @@
-/** 
- * @type 하이라이트 타입 
+/**
+ * @type 하이라이트 타입
  * @param key 식별값 (paragraphCfi + cfiRange)
  * @param accessTime 접근 시간
  * @param createTime 생성 시간
@@ -32,4 +32,4 @@ export interface Color {
   code: string;
 }
 
-export default Highlight
+export default Highlight;

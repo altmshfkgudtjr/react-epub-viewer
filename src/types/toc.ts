@@ -4,4 +4,4 @@ interface Toc {
   href: string;
 }
 
-export default Toc
+export default Toc;
