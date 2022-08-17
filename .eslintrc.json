@@ -1,0 +1,60 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.json"],
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 11,
+    "sourceType": "module"
+  },
+
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "@typescript-eslint/eslint-plugin"],
+
+  "extends": ["eslint:recommended", "plugin:react/recommended", "prettier"],
+
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2020": true,
+    "node": true,
+    "jest": true
+  },
+
+  "rules": {
+    "no-console": "off",
+    "no-unused-vars": "warn",
+    "no-unreachable": "warn",
+    "strict": ["error", "global"],
+    "curly": "warn",
+
+    /* React Options */
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/prefer-stateless-function": 0,
+    "react/jsx-filename-extension": 0,
+    "react/jsx-one-expression-per-line": 0,
+    "react/prop-types": 0,
+
+    /* React Hooks Options */
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  },
+
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": 1
+      }
+    }
+  ]
+}

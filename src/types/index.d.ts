@@ -1,12 +1,11 @@
-import * as React from "react";
-import Book, { BookOptions } from "epubjs/types/book";
-import { RenditionOptions } from "epubjs/types/rendition";
-import { Contents, Rendition } from "epubjs";
-import Toc from 'types/toc'
-import Page from 'types/page'
-import ViewerLayout from 'types/viewerLayout'
-import BookType, { BookStyle, BookOption } from 'types/book'
-
+import * as React from 'react';
+import Book, { BookOptions } from 'epubjs/types/book';
+import { RenditionOptions } from 'epubjs/types/rendition';
+import { Contents, Rendition } from 'epubjs';
+import Toc from 'types/toc';
+import Page from 'types/page';
+import ViewerLayout from 'types/viewerLayout';
+import BookType, { BookStyle, BookOption } from 'types/book';
 
 /**
  * DOM Element wrapping the Epub viewer
@@ -26,9 +25,9 @@ export interface ViewerRef extends HTMLDivElement {
    * @param color Highlight color
    */
   onHighlight: (
-    cfiRange: string, 
+    cfiRange: string,
     callback?: (e: any) => void,
-    color?: string
+    color?: string,
   ) => void;
   /**
    * Remove specific highlight
@@ -42,7 +41,7 @@ export interface ViewerRef extends HTMLDivElement {
   setLocation: (location: string) => void;
 }
 
-/** 
+/**
  * Epub Viewer Props
  * @type
  * @param url Epub file path
@@ -73,9 +72,8 @@ export interface EpubViewerProps {
 
 declare class EpubViewer extends React.Component<EpubViewerProps, ViewerRef> {}
 
-
-/** 
- * React Epub Viewer Props 
+/**
+ * React Epub Viewer Props
  * @type
  * @param url Epub file path
  * @param viewerLayout Viewer layout
@@ -92,7 +90,7 @@ export interface ReactViewerProps {
   url: string;
   viewerLayout?: ViewerLayout;
   viewerStyle?: BookStyle;
-	viewerStyleURL?: string;
+  viewerStyleURL?: string;
   viewerOption?: BookOption;
   onBookInfoChange?: (book: BookType) => void;
   onPageChange?: (page: Page) => void;
@@ -101,6 +99,9 @@ export interface ReactViewerProps {
   loadingView?: React.ReactNode;
 }
 
-declare class ReactEpubViewer extends React.Component<ReactViewerProps, ViewerRef> {}
+declare class ReactEpubViewer extends React.Component<
+  ReactViewerProps,
+  ViewerRef
+> {}
 
 export { EpubViewer, ReactEpubViewer };

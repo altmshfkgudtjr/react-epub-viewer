@@ -7,13 +7,13 @@
  * @param endCfi 현재 페이지 끝 CFI
  * @param base 현재 페이지 CFI base
  */
- interface Page {
-	chapterName: string, 
-	currentPage: number, 
-	totalPage: number, 
-	startCfi: string, 
-	endCfi: string,
-	base: string
- }
- 
- export default Page
+interface Page {
+  chapterName: string;
+  currentPage: number;
+  totalPage: number;
+  startCfi: string;
+  endCfi: string;
+  base: string;
+}
+
+export default Page;

@@ -1,0 +1,23 @@
+{
+  "extends": [":timezone(Asia/Seoul)", "config:js-app"],
+  "labels": ["dependencies"],
+  "npm": {
+    "separateMinorPatch": true,
+    "packageRules": [
+      {
+        "packagePatterns": ["^@types/"],
+        "automerge": true,
+        "major": {
+          "automerge": false
+        }
+      },
+      {
+        "groupName": "CODE_SYNTAX",
+        "packageNames": ["eslint", "prettier"],
+        "packagePatterns": ["^eslint-", "^prettier-"]
+      }
+    ]
+  },
+  "enabledManagers": ["npm"],
+  "ignorePaths": []
+}

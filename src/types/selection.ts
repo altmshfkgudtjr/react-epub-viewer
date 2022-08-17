@@ -8,12 +8,12 @@
  * @param content 선택된 텍스트
  */
 interface Selection {
-	update: boolean;
-	x: number;
-	y: number;
-	height: number;
-	cfiRange: string;
-	content: string;
+  update: boolean;
+  x: number;
+  y: number;
+  height: number;
+  cfiRange: string;
+  content: string;
 }
 
-export default Selection
+export default Selection;
