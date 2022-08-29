@@ -38,8 +38,8 @@
     "postcompile": "cp -r ./src/types ./lib/types"
   },
   "dependencies": {
+    "react-scripts": "5.0.1"
     "epubjs": "0.3.93",
-    "react-scripts": "5.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
