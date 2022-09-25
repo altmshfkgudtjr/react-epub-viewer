@@ -2749,10 +2749,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.15.tgz#97779282c09c09577120a2162e71d8380003590a"
   integrity sha512-zWt4SDDv1S9WRBNxLFxFRHxdD9tvH8f5/kg5/IaLFdnSNXsDY4eL3Q3XXN+VxUnWIhyVFDwcsmAprvwXoM/ClA==
 
-"@types/node@16.11.51":
-  version "16.11.51"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.51.tgz#bb2114485e6fc1460f630702fb992007d120e928"
-  integrity sha512-h6p1A77pHBDdOcI9y6Wfh9iRGa8lMUZMk2ebHJTNTtRwgbQzgemZow6PW7+Xs7Z0r0IQFY1+iRlcNAkRrf53nA==
+"@types/node@16.11.60":
+  version "16.11.60"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.60.tgz#a1fbca80c18dd80c8783557304cdb7d55ac3aff5"
+  integrity sha512-kYIYa1D1L+HDv5M5RXQeEu1o0FKA6yedZIoyugm/MBPROkLpX4L7HRxMrPVyo8bnvjpW/wDlqFNGzXNMb7AdRw==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
