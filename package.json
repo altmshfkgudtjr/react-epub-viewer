@@ -55,7 +55,7 @@
     "@types/jest": "26.0.24",
     "@types/node": "16.11.49",
     "@types/react": "17.0.50",
-    "@types/react-dom": "17.0.17",
+    "@types/react-dom": "18.0.6",
     "@types/styled-components": "5.1.26",
     "@typescript-eslint/eslint-plugin": "5.33.1",
     "babel-plugin-module-resolver": "4.0.0",
