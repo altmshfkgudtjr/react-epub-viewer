@@ -70,8 +70,6 @@ export interface EpubViewerProps {
   loadingView?: React.ReactNode;
 }
 
-declare class EpubViewer extends React.Component<EpubViewerProps, ViewerRef> {}
-
 /**
  * React Epub Viewer Props
  * @type
@@ -98,10 +96,3 @@ export interface ReactViewerProps {
   onSelection?: (cfiRange: string, contents: Contents) => void;
   loadingView?: React.ReactNode;
 }
-
-declare class ReactEpubViewer extends React.Component<
-  ReactViewerProps,
-  ViewerRef
-> {}
-
-export { EpubViewer, ReactEpubViewer };
