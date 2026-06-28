@@ -10,9 +10,20 @@
 
 [![Latest Stable Version](https://img.shields.io/npm/v/react-epub-viewer.svg?style=for-the-badge)](https://www.npmjs.com/package/react-epub-viewer) [![License](https://img.shields.io/badge/license-mit-red.svg?style=for-the-badge)](https://www.npmjs.com/package/react-epub-viewer) 
 
-**React-Epub-Viewer** is Epub Viewer for React.js powered by [Epub.js](https://github.com/futurepress/epub.js/) v0.3
+**React-Epub-Viewer** is an Epub viewer for React.js powered by [Epub.js](https://github.com/futurepress/epub.js/) v0.3.
 
-You can use React-Epub-Viewer together with React. 
+It works with React 17, 18, and 19, ships both ESM and CommonJS builds with bundled TypeScript types, and is compatible with Next.js (App Router).
+
+
+
+<br />
+
+
+
+## Requirements
+
+- **React** `>= 17` — tested against React 17, 18 and 19
+- **Node** `>= 22` — required to build / develop the library
 
 
 
@@ -83,7 +94,22 @@ const App = () => {
 export default App
 ```
 
-You can find other parameters in [Component Props](##Component Props).
+> **TypeScript** — the ref exposes imperative methods. Type it with the
+> exported `ViewerRef`:
+>
+> ```typescript
+> import { useRef } from 'react'
+> import { ReactEpubViewer, ViewerRef } from 'react-epub-viewer'
+>
+> const viewerRef = useRef<ViewerRef>(null)
+> // viewerRef.current?.nextPage() / prevPage() / onHighlight(...) / setLocation(...)
+> ```
+
+> **Next.js (App Router)** — the package ships with a `"use client"` banner,
+> so importing it from a Server Component is fine; just render it inside a
+> Client Component (epubjs needs the browser DOM).
+
+You can find other parameters in [Component Props](#component-props).
 
 
 
@@ -93,7 +119,7 @@ You can find other parameters in [Component Props](##Component Props).
 
 ## Component Props
 
-You can see also Types for React-Epub-Viewer [here](https://github.com/altmshfkgudtjr/react-epub-viewer/blob/main/src/types/index.d.ts).
+You can also see the exported types for React-Epub-Viewer [here](https://github.com/altmshfkgudtjr/react-epub-viewer/blob/main/src/types/index.ts).
 
 
 
@@ -107,7 +133,7 @@ You can see also Types for React-Epub-Viewer [here](https://github.com/altmshfkg
 - `style` - [object] Epub wrapper style
 - `location` - [string] Epub [CFI](http://idpf.org/epub/linking/cfi/epub-cfi.html) or Spine href
 - `bookChanged` - [function]  Run when epub book changed
-- `renditionChanged` - [function] Run when rendition changed
+- `rendtionChanged` - [function] Run when rendition changed _(⚠️ note the spelling — see [Notes](#notes))_
 - `pageChanged` - [function] Run when page changed
 - `tocChanged` - [function] Run when toc changed
 - `selectionChanged` - [function] Run when selected
@@ -121,6 +147,8 @@ You can see also Types for React-Epub-Viewer [here](https://github.com/altmshfkg
 
 - `url` - [string] Epub file path
 - `viewerLayout` - [object] Viewer layout values (header height, footer height, etc...)
+- `viewerStyle` - [object] Viewer style (`fontFamily`, `fontSize`, `lineHeight`, `marginHorizontal`, `marginVertical`)
+- `viewerStyleURL` - [string] Viewer style provided as an external CSS URL
 - `viewerOption` - [object] Viewer option (whether is flow or is spread)
 - `onBookInfoChange` - [function] Run when book information changed
 - `onPageChange ` - [function] Run when page changed
@@ -134,11 +162,51 @@ You can see also Types for React-Epub-Viewer [here](https://github.com/altmshfkg
 
 
 
+## Migration from 0.2.0
+
+`0.3.0` is a toolchain & runtime modernization. The public component API
+(props, ref methods) is unchanged, but the package itself changed:
+
+**Added**
+
+- React **18 / 19** support (React 17 still works).
+- Dual **ESM + CommonJS** build with a proper `exports` map.
+- Correct, bundled **TypeScript** declarations (the previous `.d.ts` had
+  unresolvable imports).
+- `"use client"` directive for **Next.js App Router** consumers.
+- Fixes the `regeneratorRuntime is not defined` error.
+
+**No longer supported / changed**
+
+- **Node `>= 22` is required.** Node 18/20 (and below) are no longer
+  supported — the project moved off the unmaintained Create React App
+  build to Vite, whose tooling targets the current Node LTS line.
+- **Package entry moved from `lib/` to `dist/`.** The library is now built
+  with Vite instead of CRA/Babel. Import from the package root as before
+  (`import { ReactEpubViewer } from 'react-epub-viewer'`); deep imports into
+  `react-epub-viewer/lib/...` no longer exist.
+
+The behavior of the components is otherwise preserved (verified against
+`0.2.0` with static equivalence checks and a unit + component test suite).
+
+
+
+## Notes
+
+- The `EpubViewer` prop `rendtionChanged` is **misspelled** (it should be
+  `renditionChanged`). The typo is kept in `0.3.0` for backward
+  compatibility and will be corrected in a future major release.
+
+
+
+<br />
+
+
+
 ---
 
 
 
-# Contribuing
+# Contributing
 
 If you would like to contribute, please follow the [guideline](https://github.com/altmshfkgudtjr/react-epub-viewer/blob/main/CONTRIBUTING.md)! Thank you! 😀
-
