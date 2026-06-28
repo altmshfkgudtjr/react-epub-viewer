@@ -204,3 +204,8 @@ $RECYCLE.BIN/
 
 /lib
 build
+
+# AI assistant guides / tooling (local only, not pushed to remote)
+/CLAUDE.md
+/docs/
+/.omc/
