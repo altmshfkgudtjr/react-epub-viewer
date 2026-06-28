@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2020",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "module": "esnext",
+    "moduleResolution": "node",
     "declaration": true,
-    "outDir": "./dist",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -15,18 +16,24 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
     "sourceMap": false,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./@types"
-    ],
-    "baseUrl": "./src"
+    "jsx": "react-jsx",
+    "baseUrl": "./src",
+    "paths": {
+      "modules": ["modules/index.ts"],
+      "modules/*": ["modules/*"],
+      "types": ["types/index.ts"],
+      "types/*": ["types/*"],
+      "lib/*": ["lib/*"],
+      "LoadingView": ["LoadingView.tsx"]
+    },
+    "types": [
+      "node",
+      "vitest/globals"
+    ]
   },
   "include": [
     "src"
