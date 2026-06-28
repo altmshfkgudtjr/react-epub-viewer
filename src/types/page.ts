@@ -1,11 +1,11 @@
 /**
  * @type Page
- * @param chapterName 현재 챕터
- * @param currentpage 현재 페이지
- * @param totalPage 총 페이지 수
- * @param startCfi 현재 페이지 시작 CFI
- * @param endCfi 현재 페이지 끝 CFI
- * @param base 현재 페이지 CFI base
+ * @param chapterName Current chapter
+ * @param currentPage Current page
+ * @param totalPage Total number of pages
+ * @param startCfi Start CFI of current page
+ * @param endCfi End CFI of current page
+ * @param base CFI base of current page
  */
 interface Page {
   chapterName: string;

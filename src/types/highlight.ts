@@ -1,14 +1,14 @@
 /**
- * @type 하이라이트 타입
- * @param key 식별값 (paragraphCfi + cfiRange)
- * @param accessTime 접근 시간
- * @param createTime 생성 시간
- * @param color 하이라이트 색상 (HEX 값)
- * @param paragraphCfi 하이라이트 단락 CFI
- * @param cfiRange 하이라이트 CFI 범위
- * @param chapterName 하이라이트 챕터명
- * @param pageNum 하이라이트 페이지
- * @param content 하이라이트 텍스트
+ * @type Highlight type
+ * @param key Identifier (paragraphCfi + cfiRange)
+ * @param accessTime Access time
+ * @param createTime Creation time
+ * @param color Highlight color (HEX value)
+ * @param paragraphCfi Highlight paragraph CFI
+ * @param cfiRange Highlight CFI range
+ * @param chpaterName Highlight chapter name
+ * @param pageNum Highlight page number
+ * @param content Highlight text
  */
 interface Highlight {
   key: string;
@@ -23,9 +23,9 @@ interface Highlight {
 }
 
 /**
- * @type 색상 타입
- * @param name 색상명
- * @param code 색상 Hex 코드
+ * @type Color type
+ * @param name Color name
+ * @param code Color hex code
  */
 export interface Color {
   name: string;

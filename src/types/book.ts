@@ -1,13 +1,13 @@
 /**
  * @type
- * @param coverURL 표지 사진 url
- * @param title 제목
- * @param description 설명
- * @param published_date 출판일
- * @param modified_date 수정일
- * @param author 저자
- * @param publisher 발행자
- * @param language 도서 언어
+ * @param coverURL Cover image url
+ * @param title Title
+ * @param description Description
+ * @param published_date Published date
+ * @param modified_date Modified date
+ * @param author Author
+ * @param publisher Publisher
+ * @param language Book language
  */
 type Book = {
   coverURL: string;
@@ -22,11 +22,11 @@ type Book = {
 
 /**
  * @type
- * @param fontFamily 폰트
- * @param fontSize 폰트 크기
- * @param lineHeight 줄 간격
- * @param marginHorizontal 가로 여백
- * @param marginVertical 세로 여백
+ * @param fontFamily Font family
+ * @param fontSize Font size
+ * @param lineHeight Line height
+ * @param marginHorizontal Horizontal margin
+ * @param marginVertical Vertical margin
  */
 export type BookStyle = {
   fontFamily: BookFontFamily;
@@ -38,8 +38,8 @@ export type BookStyle = {
 
 /**
  * @type
- * - Origin: 원본
- * - *: 커스텀 폰트
+ * - Origin: Original font
+ * - *: Custom font
  */
 export type BookFontFamily = 'Origin' | 'Roboto';
 
@@ -47,9 +47,9 @@ export type BookFlow = 'paginated' | 'scrolled-doc';
 
 /**
  * @type
- * @param flow 가로읽기 or 세로읽기(스크롤)
- * @param resizeOnOrientationChange 방향 전환시 크기 조절 여부
- * @param spread 펼쳐보기 여부
+ * @param flow Horizontal (paginated) or vertical (scrolled) reading
+ * @param resizeOnOrientationChange Whether to resize on orientation change
+ * @param spread Whether to show two-page spread
  */
 export type BookOption = {
   flow: BookFlow;

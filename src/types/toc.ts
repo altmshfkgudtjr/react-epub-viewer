@@ -1,4 +1,4 @@
-/** @type 목차 단일 Spine 타입 */
+/** @type Table-of-contents single spine type */
 interface Toc {
   label: string;
   href: string;
