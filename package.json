@@ -58,14 +58,16 @@
     "epubjs": "0.3.93"
   },
   "peerDependencies": {
-    "react": ">=17.0.1",
-    "react-dom": ">=17.0.1"
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
     "@types/node": "^22.7.0",
-    "@types/react": "^17.0.83",
-    "@types/react-dom": "^17.0.25",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@vitejs/plugin-react": "^4.3.2",
@@ -75,8 +77,8 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "jsdom": "^25.0.1",
     "prettier": "^3.3.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "rimraf": "^6.0.1",
     "typescript": "^5.6.2",
     "vite": "^5.4.8",

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { EpubViewer, ReactEpubViewer } from 'modules';
 import { ViewerRef } from 'types';
 
@@ -27,4 +27,7 @@ const App = ({ VIEWER_TYPE = 'ReactViewer' }: Props) => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+if (container) {
+  createRoot(container).render(<App />);
+}

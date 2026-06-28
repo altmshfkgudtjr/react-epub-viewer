@@ -47,9 +47,14 @@ const ReactViewer = (
     onSelection,
     loadingView,
   }: ReactViewerProps,
-  ref: React.RefObject<ViewerRef> | any,
+  ref: React.ForwardedRef<ViewerRef>,
 ) => {
-  // TODO Fix the ref type correctly instead 'any' type.
+  /**
+   * This component requires an object ref (not a callback ref); narrow it once
+   * here for `.current` access while still forwarding `ref` to EpubViewer.
+   */
+  const viewerRef = ref as React.MutableRefObject<ViewerRef | null>;
+
   const [book, setBook] = useState<Book | null>(null);
 
   const [rendition, setRendition] = useState<Rendition | null>(null);
@@ -76,6 +81,15 @@ const ReactViewer = (
   }>({
     cfiRange: '',
     contents: null,
+  });
+
+  // Keep the latest consumer callbacks in refs so effects don't re-run when
+  // inline callback props change identity between renders.
+  const onBookInfoChangeRef = useRef(onBookInfoChange);
+  const onSelectionRef = useRef(onSelection);
+  useEffect(() => {
+    onBookInfoChangeRef.current = onBookInfoChange;
+    onSelectionRef.current = onSelection;
   });
 
   /**
@@ -169,7 +183,9 @@ const ReactViewer = (
 
         try {
           rendition.resize(w, h);
-        } catch {}
+        } catch {
+          /* ignore resize errors thrown during rapid layout changes */
+        }
       }),
     [
       rendition,
@@ -186,9 +202,9 @@ const ReactViewer = (
    * - Fire after the Epubjs selected event. [about 300ms]
    */
   const onSelected = useCallback(async () => {
-    if (!ref.current) return;
+    if (!viewerRef.current) return;
 
-    const iframe = ref.current.querySelector('iframe');
+    const iframe = viewerRef.current.querySelector('iframe');
     if (!iframe) return;
 
     const iframeWin = iframe.contentWindow;
@@ -208,8 +224,8 @@ const ReactViewer = (
     const contents = currentSelection.current.contents;
     if (!contents) return;
 
-    onSelection && onSelection(cfiRange, contents);
-  }, [ref, onSelection]);
+    onSelectionRef.current?.(cfiRange, contents);
+  }, [viewerRef]);
 
   /** Ref checker */
   useEffect(() => {
@@ -221,8 +237,6 @@ const ReactViewer = (
   }, [ref]);
 
   /** Epub parsing */
-  // TODO Fix the infinite re-rendering issue, when inlcude `onBookInfoChange` to dependencies array.
-  /* eslint-disable */
   useEffect(() => {
     if (!book) return;
 
@@ -239,13 +253,12 @@ const ReactViewer = (
           language: metaData.language,
         };
 
-        onBookInfoChange && onBookInfoChange(newBookData);
+        onBookInfoChangeRef.current?.(newBookData);
       })
       .catch(error => {
         throw `${error.stack} \n\n Message : Epub parsing failed.`;
       });
   }, [book]);
-  /* eslint-enable */
 
   /** Set viewer Styles/Options */
   useEffect(() => {
@@ -294,7 +307,7 @@ const ReactViewer = (
       Object.assign(newStyle.body, {});
     }
 
-    if (!!viewerStyleURL) {
+    if (viewerStyleURL) {
       rendition.themes.registerUrl('main', viewerStyleURL);
     }
 
@@ -341,4 +354,4 @@ const ReactViewer = (
   );
 };
 
-export default React.forwardRef(ReactViewer);
+export default React.forwardRef<ViewerRef, ReactViewerProps>(ReactViewer);

@@ -10,7 +10,6 @@ import { Book, Rendition } from 'epubjs';
 import styles from 'modules/epubViewer/styles';
 // types
 import { EpubViewerProps, ViewerRef } from 'types';
-import Toc from 'types/toc';
 import Loc from 'types/loc';
 
 /**
@@ -44,9 +43,15 @@ const EpubViewer = (
     selectionChanged,
     loadingView,
   }: EpubViewerProps,
-  ref: React.RefObject<ViewerRef> | any,
+  ref: React.ForwardedRef<ViewerRef>,
 ) => {
-  // TODO Fix the ref type correctly instead 'any' type.
+  /**
+   * This component requires an object ref (not a callback ref) because it both
+   * forwards the ref to the wrapper element and augments `ref.current` with
+   * imperative methods. Narrow it once here.
+   */
+  const viewerRef = ref as React.MutableRefObject<ViewerRef | null>;
+
   const viewerStyle: CSSProperties = style ? { ...styles, ...style } : styles;
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -56,6 +61,21 @@ const EpubViewer = (
   const [rendition, setRendition] = useState<Rendition | null>(null);
 
   const currentCfi = useRef<string>('');
+
+  // Keep the latest consumer callbacks in refs so effects don't re-run when
+  // inline callback props change identity between renders.
+  const bookChangedRef = useRef(bookChanged);
+  const rendtionChangedRef = useRef(rendtionChanged);
+  const pageChangedRef = useRef(pageChanged);
+  const tocChangedRef = useRef(tocChanged);
+  const selectionChangedRef = useRef(selectionChanged);
+  useEffect(() => {
+    bookChangedRef.current = bookChanged;
+    rendtionChangedRef.current = rendtionChanged;
+    pageChangedRef.current = pageChanged;
+    tocChangedRef.current = tocChanged;
+    selectionChangedRef.current = selectionChanged;
+  });
 
   /**
    * Move page
@@ -108,20 +128,27 @@ const EpubViewer = (
       const currentPage = locations.locationFromCfi(startCfi);
       const totalPage = locations.total;
 
-      pageChanged &&
-        pageChanged({
-          chapterName,
-          currentPage,
-          totalPage,
-          startCfi,
-          endCfi,
-          base,
-        });
+      pageChangedRef.current?.({
+        chapterName,
+        currentPage,
+        totalPage,
+        startCfi,
+        endCfi,
+        base,
+      });
 
       currentCfi.current = startCfi;
     },
-    [book, pageChanged],
+    [book],
   );
+
+  /**
+   * Selection event handler with a stable identity (reads the latest callback
+   * from a ref) so listeners are not re-registered on every render.
+   */
+  const handleSelected = useCallback((cfiRange: string, contents: any) => {
+    selectionChangedRef.current?.(cfiRange, contents);
+  }, []);
 
   /**
    * Highlight function
@@ -171,23 +198,23 @@ const EpubViewer = (
    * - REF.CURRENT.seLocation(): Move to specific cfi or href
    */
   const registerGlobalFunc = useCallback(() => {
-    if (!ref.current) return;
+    if (!viewerRef.current) return;
     if (movePage) {
-      ref.current.prevPage = () => movePage('PREV');
-      ref.current.nextPage = () => movePage('NEXT');
+      viewerRef.current.prevPage = () => movePage('PREV');
+      viewerRef.current.nextPage = () => movePage('NEXT');
     }
-    ref.current.getCurrentCfi = () => currentCfi.current;
+    viewerRef.current.getCurrentCfi = () => currentCfi.current;
     if (onHighlight) {
-      ref.current.onHighlight = onHighlight;
+      viewerRef.current.onHighlight = onHighlight;
     }
     if (onRemoveHighlight) {
-      ref.current.offHighlight = onRemoveHighlight;
+      viewerRef.current.offHighlight = onRemoveHighlight;
     }
     if (rendition) {
-      ref.current.setLocation = (location: string) =>
+      viewerRef.current.setLocation = (location: string) =>
         rendition.display(location);
     }
-  }, [ref, rendition, movePage, onHighlight, onRemoveHighlight]);
+  }, [viewerRef, rendition, movePage, onHighlight, onRemoveHighlight]);
 
   /** Ref Checker */
   useEffect(() => {
@@ -198,48 +225,50 @@ const EpubViewer = (
     }
   }, [ref]);
 
-  /** Epub init options Changed */
+  /** Epub book lifecycle: create on url/options change, destroy on cleanup */
   useEffect(() => {
     if (!url) return;
 
-    let mounted: boolean = true;
-    let book_: Book | any = null;
-
-    if (!mounted) return;
-
-    if (book_) {
-      book_.destroy();
-    }
-
-    book_ = new Book(url, epubFileOptions);
+    const book_ = new Book(url, epubFileOptions);
     setBook(book_);
 
     return () => {
-      mounted = false;
+      // epubjs destroy is not always idempotent; guard against throws.
+      try {
+        book_.destroy();
+      } catch {
+        /* ignore epubjs teardown errors */
+      }
+      setBook(null);
+      setRendition(null);
+      setIsLoaded(false);
     };
-  }, [url, epubFileOptions, setBook, setIsLoaded]);
+  }, [url, epubFileOptions]);
 
   /** Book Changed */
   useEffect(() => {
     if (!book) return;
 
-    if (bookChanged) bookChanged(book);
+    bookChangedRef.current?.(book);
 
     book.loaded.navigation.then(({ toc }) => {
-      const toc_: Toc[] = toc.map(t => ({
+      const toc_ = toc.map(t => ({
         label: t.label,
         href: t.href,
       }));
 
       setIsLoaded(true);
-      if (tocChanged) tocChanged(toc_);
+      tocChangedRef.current?.(toc_);
     });
 
     book.ready
       .then(function () {
         if (!book) return;
 
-        const stored = localStorage.getItem(book.key() + '-locations');
+        const stored =
+          typeof localStorage !== 'undefined'
+            ? localStorage.getItem(book.key() + '-locations')
+            : null;
         if (stored) {
           return book.locations.load(stored);
         } else {
@@ -248,59 +277,67 @@ const EpubViewer = (
       })
       .then(() => {
         if (!book) return;
-        localStorage.setItem(book.key() + '-locations', book.locations.save());
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem(
+            book.key() + '-locations',
+            book.locations.save(),
+          );
+        }
       });
-  }, [book, bookChanged, tocChanged]);
+  }, [book]);
 
   /** Rendition Changed */
   useEffect(() => {
     if (!rendition) return;
 
-    if (rendtionChanged) rendtionChanged(rendition);
-  }, [rendition, rendtionChanged]);
+    rendtionChangedRef.current?.(rendition);
+  }, [rendition]);
 
-  /** Viewer Option Changed */
+  /** Viewer Option Changed: (re)create the rendition, destroying the old one */
   useEffect(() => {
-    let mounted = true;
     if (!book) return;
 
-    const node = ref.current;
+    const node = viewerRef.current;
     if (!node) return;
+
+    let mounted = true;
+    let rendition_: Rendition | null = null;
     node.innerHTML = '';
 
     book.ready.then(function () {
-      if (!mounted) return;
+      if (!mounted || !book.spine) return;
 
-      if (book.spine) {
-        const loc = book.rendition?.location?.start?.cfi;
+      const loc = book.rendition?.location?.start?.cfi;
 
-        // if (book.rendition) book.rendition.destroy();
+      rendition_ = book.renderTo(node, {
+        width: '100%',
+        height: '100%',
+        ...epubOptions,
+      });
+      setRendition(rendition_);
 
-        const rendition_ = book.renderTo(node, {
-          width: '100%',
-          height: '100%',
-          ...epubOptions,
-        });
-        setRendition(rendition_);
-
-        if (loc) {
-          rendition_.display(loc);
-        } else {
-          rendition_.display();
-        }
+      if (loc) {
+        rendition_.display(loc);
+      } else {
+        rendition_.display();
       }
     });
 
     return () => {
       mounted = false;
+      try {
+        rendition_?.destroy();
+      } catch {
+        /* ignore epubjs teardown errors */
+      }
     };
-  }, [ref, book, epubOptions, style, setRendition]);
+  }, [book, epubOptions, viewerRef]);
 
   /** Location Changed */
   useEffect(() => {
-    if (!ref.current || !location) return;
-    if (ref.current.setLocation) ref.current.setLocation(location);
-  }, [ref, location]);
+    if (!viewerRef.current || !location) return;
+    if (viewerRef.current.setLocation) viewerRef.current.setLocation(location);
+  }, [location, viewerRef]);
 
   /**
    * Emit Viewer Event
@@ -308,7 +345,6 @@ const EpubViewer = (
    * - Register location changed event
    * - Register selection event
    */
-  /* eslint-disable */
   useEffect(() => {
     if (!rendition) return;
 
@@ -318,23 +354,22 @@ const EpubViewer = (
     document.addEventListener('keyup', handleKeyPress, false);
     rendition.on('keyup', handleKeyPress);
     rendition.on('locationChanged', onLocationChange);
-    selectionChanged && rendition.on('selected', selectionChanged);
+    rendition.on('selected', handleSelected);
 
     return () => {
       document.removeEventListener('keyup', handleKeyPress, false);
       rendition.off('keyup', handleKeyPress);
       rendition.off('locationChanged', onLocationChange);
-      selectionChanged && rendition.off('selected', selectionChanged);
+      rendition.off('selected', handleSelected);
     };
-  }, [rendition, registerGlobalFunc, handleKeyPress]);
-  /* eslint-enable */
+  }, [rendition, registerGlobalFunc, handleKeyPress, onLocationChange, handleSelected]);
 
   return (
     <>
       {!isLoaded && loadingView}
-      <div ref={ref} style={viewerStyle} />
+      <div ref={viewerRef} style={viewerStyle} />
     </>
   );
 };
 
-export default React.forwardRef(EpubViewer);
+export default React.forwardRef<ViewerRef, EpubViewerProps>(EpubViewer);

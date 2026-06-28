@@ -33,6 +33,9 @@ export default defineConfig({
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime', 'epubjs'],
       output: {
+        // Mark the bundle as a client component for React Server Components
+        // (Next.js App Router) consumers.
+        banner: "'use client';",
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
