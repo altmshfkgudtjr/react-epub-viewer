@@ -277,7 +277,10 @@ const ReactViewer = (
       body: {
         'padding-top': '0px !important',
         'padding-bottom': '0px !important',
+        // Apply font-size and line-height at the document root so every tag
+        // (headings, div, span, li, …) inherits them, not just <p> (#23).
         'font-size': `${bookStyle.fontSize}px !important`,
+        'line-height': `${bookStyle.lineHeight} !important`,
       },
       p: {
         'font-size': `${bookStyle.fontSize}px !important`,
@@ -291,6 +294,20 @@ const ReactViewer = (
     if (bookStyle.fontFamily !== 'Origin') {
       Object.assign(newStyle.body, {
         'font-family': `${bookStyle.fontFamily} !important`,
+      });
+    }
+
+    // Theme colors (#101) — only injected when provided so the publisher's
+    // original colors are kept by default.
+    if (bookStyle.color) {
+      Object.assign(newStyle.body, {
+        color: `${bookStyle.color} !important`,
+      });
+    }
+
+    if (bookStyle.backgroundColor) {
+      Object.assign(newStyle.body, {
+        'background-color': `${bookStyle.backgroundColor} !important`,
       });
     }
 
@@ -319,6 +336,8 @@ const ReactViewer = (
     bookStyle.fontFamily,
     bookStyle.fontSize,
     bookStyle.lineHeight,
+    bookStyle.color,
+    bookStyle.backgroundColor,
     viewerStyleURL,
     bookOption,
     onResize,
@@ -333,8 +352,15 @@ const ReactViewer = (
   /** Emit selection event */
   useEffect(() => {
     if (!rendition) return;
+    // `mouseup` covers pointer devices; `touchend` is required for touch
+    // devices where `mouseup` never fires, so selection/highlight works on
+    // mobile (#10).
     rendition.on('mouseup', onSelected);
-    return () => rendition.off('mouseup', onSelected);
+    rendition.on('touchend', onSelected);
+    return () => {
+      rendition.off('mouseup', onSelected);
+      rendition.off('touchend', onSelected);
+    };
   }, [rendition, onSelected]);
 
   return (

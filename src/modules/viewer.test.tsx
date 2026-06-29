@@ -183,6 +183,69 @@ describe('EpubViewer (mocked epubjs)', () => {
     expect(rendition.annotations.highlight).toHaveBeenCalled();
   });
 
+  it('offAllHighlight removes every tracked highlight (#26)', async () => {
+    const ref = createRef<ViewerRef>();
+    render(<EpubViewer url="a.epub" ref={ref} />);
+    await waitFor(() =>
+      expect(typeof ref.current?.offAllHighlight).toBe('function'),
+    );
+
+    const rendition = MockBook.instances[0].lastRendition;
+    act(() => {
+      ref.current!.onHighlight('epubcfi(/6/2!/4)');
+      ref.current!.onHighlight('epubcfi(/6/2!/6)');
+    });
+    rendition.annotations.remove.mockClear();
+
+    act(() => ref.current!.offAllHighlight());
+
+    expect(rendition.annotations.remove).toHaveBeenCalledTimes(2);
+    expect(rendition.annotations.remove).toHaveBeenCalledWith(
+      'epubcfi(/6/2!/4)',
+      'highlight',
+    );
+    expect(rendition.annotations.remove).toHaveBeenCalledWith(
+      'epubcfi(/6/2!/6)',
+      'highlight',
+    );
+
+    // Tracking set is cleared: a second call removes nothing.
+    rendition.annotations.remove.mockClear();
+    act(() => ref.current!.offAllHighlight());
+    expect(rendition.annotations.remove).not.toHaveBeenCalled();
+  });
+
+  it('does not emit pageChanged with currentPage = -1 (#93 guard)', async () => {
+    const pageChanged = vi.fn();
+    const ref = createRef<ViewerRef>();
+    render(<EpubViewer url="a.epub" ref={ref} pageChanged={pageChanged} />);
+    await waitFor(() =>
+      expect(MockBook.instances[0]?.lastRendition).toBeTruthy(),
+    );
+
+    // Simulate epubjs returning -1 before locations are generated.
+    MockBook.instances[0].locations.locationFromCfi.mockReturnValueOnce(-1);
+
+    const rendition = MockBook.instances[0].lastRendition;
+    act(() =>
+      rendition.emit('locationChanged', {
+        start: 'epubcfi(/6/2!/4/1:0)',
+        end: 'epubcfi(/6/2!/4/1:5)',
+      }),
+    );
+    expect(pageChanged).not.toHaveBeenCalled();
+
+    // A valid page is still emitted normally.
+    act(() =>
+      rendition.emit('locationChanged', {
+        start: 'epubcfi(/6/2!/4/1:0)',
+        end: 'epubcfi(/6/2!/4/1:5)',
+      }),
+    );
+    expect(pageChanged).toHaveBeenCalledTimes(1);
+    expect(pageChanged.mock.calls[0][0]).toMatchObject({ currentPage: 3 });
+  });
+
   it('invokes the LATEST pageChanged on locationChanged (latest-ref pattern)', async () => {
     const first = vi.fn();
     const second = vi.fn();
@@ -256,5 +319,46 @@ describe('ReactEpubViewer (mocked epubjs)', () => {
     const book = MockBook.instances[0];
     unmount();
     expect(book.destroy).toHaveBeenCalled();
+  });
+
+  it('injects theme color/background into the body style (#101)', async () => {
+    render(
+      <ReactEpubViewer
+        url="a.epub"
+        ref={createRef()}
+        viewerStyle={{
+          fontFamily: 'Origin',
+          fontSize: 16,
+          lineHeight: 1.4,
+          marginHorizontal: 0,
+          marginVertical: 0,
+          color: '#222',
+          backgroundColor: '#fff',
+        }}
+      />,
+    );
+
+    await waitFor(() =>
+      expect(MockBook.instances[0]?.lastRendition?.themes.register).toHaveBeenCalled(),
+    );
+
+    const rendition = MockBook.instances[0].lastRendition;
+    const lastStyle = rendition.themes.register.mock.calls.at(-1)[1];
+    expect(lastStyle.body).toMatchObject({
+      color: '#222 !important',
+      'background-color': '#fff !important',
+      'line-height': '1.4 !important',
+    });
+  });
+
+  it('registers a touchend selection listener for mobile (#10)', async () => {
+    render(<ReactEpubViewer url="a.epub" ref={createRef()} onSelection={vi.fn()} />);
+    await waitFor(() =>
+      expect(MockBook.instances[0]?.lastRendition).toBeTruthy(),
+    );
+
+    const rendition = MockBook.instances[0].lastRendition;
+    await waitFor(() => expect(rendition.handlers.touchend?.length).toBe(1));
+    expect(rendition.handlers.mouseup?.length).toBe(1);
   });
 });

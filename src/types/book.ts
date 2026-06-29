@@ -27,6 +27,8 @@ type Book = {
  * @param lineHeight Line height
  * @param marginHorizontal Horizontal margin
  * @param marginVertical Vertical margin
+ * @param color Text color (any CSS color). Applied to the whole document body
+ * @param backgroundColor Background color (any CSS color)
  */
 export type BookStyle = {
   fontFamily: BookFontFamily;
@@ -34,14 +36,19 @@ export type BookStyle = {
   lineHeight: number;
   marginHorizontal: number;
   marginVertical: number;
+  color?: string;
+  backgroundColor?: string;
 };
 
 /**
  * @type
- * - Origin: Original font
- * - *: Custom font
+ * - Origin: Original (publisher) font
+ * - Roboto: Bundled example font
+ * - *: Any other font-family string (custom font). When you pass a custom
+ *   family make sure the font is actually available to the rendered content
+ *   (e.g. registered via `rendition.themes.font()` / an `@font-face` rule).
  */
-export type BookFontFamily = 'Origin' | 'Roboto';
+export type BookFontFamily = 'Origin' | 'Roboto' | (string & {});
 
 export type BookFlow = 'paginated' | 'scrolled-doc';
 
