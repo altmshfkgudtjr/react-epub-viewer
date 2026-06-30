@@ -35,6 +35,10 @@ export interface ViewerRef extends HTMLDivElement {
    */
   offHighlight: (cfiRange: string) => void;
   /**
+   * Remove every highlight added through `onHighlight`
+   */
+  offAllHighlight: () => void;
+  /**
    * Move the viewer to the cfi or href
    * @param location CFI or Href
    */

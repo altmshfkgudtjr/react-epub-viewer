@@ -62,6 +62,11 @@ const EpubViewer = (
 
   const currentCfi = useRef<string>('');
 
+  // Track every CFIRange highlighted through `onHighlight` so we can clear
+  // them all later. epubjs keeps its `annotations` map private, so there is no
+  // public way to enumerate them without this bookkeeping.
+  const highlights = useRef<Set<string>>(new Set());
+
   // Keep the latest consumer callbacks in refs so effects don't re-run when
   // inline callback props change identity between renders.
   const bookChangedRef = useRef(bookChanged);
@@ -128,14 +133,21 @@ const EpubViewer = (
       const currentPage = locations.locationFromCfi(startCfi);
       const totalPage = locations.total;
 
-      pageChangedRef.current?.({
-        chapterName,
-        currentPage,
-        totalPage,
-        startCfi,
-        endCfi,
-        base,
-      });
+      // #93 guard: epubjs returns -1 from `locationFromCfi` when the locations
+      // index has not been generated yet (e.g. right after a url transition,
+      // before `book.locations.generate()` resolves). Skip emitting the bogus
+      // page so consumers never receive `currentPage = -1`; the correct page is
+      // reported by the next locationChanged once locations are ready.
+      if (currentPage >= 0) {
+        pageChangedRef.current?.({
+          chapterName,
+          currentPage,
+          totalPage,
+          startCfi,
+          endCfi,
+          base,
+        });
+      }
 
       currentCfi.current = startCfi;
     },
@@ -170,6 +182,7 @@ const EpubViewer = (
           fill: color || '#fdf183',
         },
       );
+      highlights.current.add(cfiRange);
     },
     [rendition],
   );
@@ -183,9 +196,29 @@ const EpubViewer = (
       if (!rendition) return;
 
       rendition.annotations.remove(cfiRange, 'highlight');
+      highlights.current.delete(cfiRange);
     },
     [rendition],
   );
+
+  /**
+   * Remove every highlight added through `onHighlight`
+   * @method
+   */
+  const onRemoveAllHighlight = useCallback(() => {
+    if (!rendition) return;
+
+    highlights.current.forEach(cfiRange => {
+      // epubjs throws if the annotation no longer exists; ignore so one stale
+      // entry cannot abort the whole clear.
+      try {
+        rendition.annotations.remove(cfiRange, 'highlight');
+      } catch {
+        /* ignore already-removed annotations */
+      }
+    });
+    highlights.current.clear();
+  }, [rendition]);
 
   /**
    * Register viewer control function
@@ -195,6 +228,7 @@ const EpubViewer = (
    * - REF.CURRENT.getCurrentCfi() : Get current CFI
    * - REF.CURRENT.onHighlight(): Set highlight
    * - REF.CURRENT.offHighlight(): Remove specific highliht
+   * - REF.CURRENT.offAllHighlight(): Remove every highlight
    * - REF.CURRENT.seLocation(): Move to specific cfi or href
    */
   const registerGlobalFunc = useCallback(() => {
@@ -210,11 +244,21 @@ const EpubViewer = (
     if (onRemoveHighlight) {
       viewerRef.current.offHighlight = onRemoveHighlight;
     }
+    if (onRemoveAllHighlight) {
+      viewerRef.current.offAllHighlight = onRemoveAllHighlight;
+    }
     if (rendition) {
       viewerRef.current.setLocation = (location: string) =>
         rendition.display(location);
     }
-  }, [viewerRef, rendition, movePage, onHighlight, onRemoveHighlight]);
+  }, [
+    viewerRef,
+    rendition,
+    movePage,
+    onHighlight,
+    onRemoveHighlight,
+    onRemoveAllHighlight,
+  ]);
 
   /** Ref Checker */
   useEffect(() => {
