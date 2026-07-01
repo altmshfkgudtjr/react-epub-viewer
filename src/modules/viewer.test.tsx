@@ -361,4 +361,32 @@ describe('ReactEpubViewer (mocked epubjs)', () => {
     await waitFor(() => expect(rendition.handlers.touchend?.length).toBe(1));
     expect(rendition.handlers.mouseup?.length).toBe(1);
   });
+
+  it('forwards epubOptions to renderTo, e.g. allowScriptedContent (#119)', async () => {
+    render(
+      <ReactEpubViewer
+        url="a.epub"
+        ref={createRef()}
+        epubOptions={{ allowScriptedContent: true }}
+      />,
+    );
+    await waitFor(() =>
+      expect(MockBook.instances[0]?.renderTo).toHaveBeenCalled(),
+    );
+
+    const renderOpts = MockBook.instances[0].renderTo.mock.calls.at(-1)[1];
+    expect(renderOpts).toMatchObject({ allowScriptedContent: true });
+  });
+
+  it('forwards epubFileOptions to the epubjs Book (#119)', async () => {
+    render(
+      <ReactEpubViewer
+        url="a.epub"
+        ref={createRef()}
+        epubFileOptions={{ openAs: 'epub' }}
+      />,
+    );
+    await waitFor(() => expect(MockBook.instances.length).toBe(1));
+    expect(MockBook.instances[0].options).toMatchObject({ openAs: 'epub' });
+  });
 });

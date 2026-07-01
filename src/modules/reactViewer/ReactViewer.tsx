@@ -37,6 +37,8 @@ import BookType, { BookStyle, BookOption } from 'types/book';
 const ReactViewer = (
   {
     url,
+    epubFileOptions,
+    epubOptions,
     viewerLayout,
     viewerStyle,
     viewerStyleURL,
@@ -367,6 +369,8 @@ const ReactViewer = (
     <>
       <EpubViewer
         url={url}
+        epubFileOptions={epubFileOptions}
+        epubOptions={epubOptions}
         style={layoutStyle}
         bookChanged={bookChanged}
         rendtionChanged={rendtionChanged}
