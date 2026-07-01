@@ -78,6 +78,11 @@ export interface EpubViewerProps {
  * React Epub Viewer Props
  * @type
  * @param url Epub file path
+ * @param epubFileOptions Epub file option (forwarded to epubjs `Book`)
+ * @param epubOptions Epub rendition option (forwarded to epubjs `renderTo`).
+ *   Set `allowScriptedContent: true` to run scripts embedded in the EPUB
+ *   (interactive / InDesign EPUBs). See the security note in the docs — only
+ *   enable this for content you trust.
  * @param viewerLayout Viewer layout
  * @param viewerStyle Viewer style
  * @param viewerStyleURL Viewer style - CSS URL
@@ -90,6 +95,8 @@ export interface EpubViewerProps {
  */
 export interface ReactViewerProps {
   url: string;
+  epubFileOptions?: BookOptions;
+  epubOptions?: RenditionOptions;
   viewerLayout?: ViewerLayout;
   viewerStyle?: BookStyle;
   viewerStyleURL?: string;
