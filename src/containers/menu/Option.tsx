@@ -7,6 +7,7 @@ import OptionDropdown from 'components/option/Dropdown'
 import OptionSlider from 'components/option/Slider'
 import ControlIconBtnWrapper from 'components/option/ControlIconBtnWrapper'
 import ControlIconBtn from 'components/option/ControlIconBtn'
+import ThemeItem from 'components/option/ThemeItem'
 // types
 import { BookStyle, BookFontFamily, BookFlow } from 'types/book'
 import { MenuControl } from 'lib/hooks/useMenu'
@@ -27,6 +28,7 @@ const Option = ({
   const [lineHeight, setLineHeight] = useState<number>(bookStyle.lineHeight);
   const [marginHorizontal, setMarginHorizontal] = useState<number>(bookStyle.marginHorizontal);
   const [marginVertical, setMarginVertical] = useState<number>(bookStyle.marginVertical);
+  const [themeName, setThemeName] = useState<ThemeName>("Default");
   const [isScrollHorizontal, setIsScrollHorizontal] = useState<boolean>(true);
   const [viewType, setViewType] = useState<ViewType>({
     active: true,
@@ -36,6 +38,9 @@ const Option = ({
 
   /** Change font family */
   const onSelectFontFamily = (font: BookFontFamily) => setFontFamily(font);
+
+  /** Select a preset theme (text + background color) */
+  const onSelectTheme = (name: ThemeName) => setThemeName(name);
 
   /** Change font style and layout */
   const onChangeSlider = (type: SliderType, e: any) => {
@@ -105,23 +110,27 @@ const Option = ({
   // TODO Fix the infinite re-rendering issue, when inlcude `onBookStyleChange` to dependencies array.
   /* eslint-disable */
   useEffect(() => {
-    const timer = window.setTimeout(() => { 
+    const theme = THEME_LIST.find(t => t.name === themeName);
+    const timer = window.setTimeout(() => {
       onBookStyleChange({
         fontFamily,
         fontSize,
         lineHeight,
         marginHorizontal,
-        marginVertical
+        marginVertical,
+        color: theme && theme.color,
+        backgroundColor: theme && theme.backgroundColor
       });
     }, 250);
 
     return () => window.clearTimeout(timer);
   }, [
-    fontFamily, 
-    fontSize, 
-    lineHeight, 
-    marginHorizontal, 
-    marginVertical
+    fontFamily,
+    fontSize,
+    lineHeight,
+    marginHorizontal,
+    marginVertical,
+    themeName
   ]);
   /* eslint-enable */
 
@@ -158,6 +167,16 @@ const Option = ({
                           active={viewType.active}
                           isSelected={!viewType.spread}
                           onClick={() => onClickViewType(false)} />
+        </ControlIconBtnWrapper>
+        <ControlIconBtnWrapper title="Theme">
+          {THEME_LIST.map(theme => (
+            <ThemeItem key={theme.name}
+                       name={theme.name}
+                       color={theme.color}
+                       backgroundColor={theme.backgroundColor}
+                       isSelected={themeName === theme.name}
+                       onClick={() => onSelectTheme(theme.name)} />
+          ))}
         </ControlIconBtnWrapper>
         <OptionDropdown title="Font"
                         defaultValue={fontFamily}
@@ -207,10 +226,29 @@ interface Props {
   onBookOptionChange: (bookOption: BookOption) => void;
 }
 
-type SliderType = "FontSize" 
-  | "LineHeight" 
-  | "MarginHorizontal" 
+type SliderType = "FontSize"
+  | "LineHeight"
+  | "MarginHorizontal"
   | "MarginVertical";
+
+type ThemeName = "Default" | "Light" | "Sepia" | "Dark";
+
+type Theme = {
+  name: ThemeName;
+  color?: string;
+  backgroundColor?: string;
+};
+
+/**
+ * Preset themes exercising the 0.3.1 `BookStyle.color` / `backgroundColor`.
+ * "Default" leaves both undefined so the publisher's original colors are kept.
+ */
+const THEME_LIST: Theme[] = [
+  { name: "Default" },
+  { name: "Light", color: "#3c3c3c", backgroundColor: "#ffffff" },
+  { name: "Sepia", color: "#5b4636", backgroundColor: "#f4ecd8" },
+  { name: "Dark", color: "#cfcfcf", backgroundColor: "#1e1e1e" }
+];
 
 type ViewType = {
   active: boolean,

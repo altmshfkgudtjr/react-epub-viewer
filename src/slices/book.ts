@@ -96,6 +96,10 @@ const bookSlice = createSlice({
 		popHighlight(state, action: PayloadAction<string>) {
 			const idx = state.highlights.map(h => h.key).indexOf(action.payload);
 			state.highlights.splice(idx, 1);
+		},
+		/** 하이라이트 전체 삭제 */
+		clearHighlights(state) {
+			state.highlights = [];
 		}
 	}
 });
@@ -117,7 +121,8 @@ export const {
 	clearToc,
 	pushHighlight,
 	updateHighlight,
-	popHighlight
+	popHighlight,
+	clearHighlights
  } = bookSlice.actions;
  
 export default bookSlice.reducer

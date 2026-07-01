@@ -27,6 +27,8 @@ type Book = {
  * @param lineHeight 줄 간격
  * @param marginHorizontal 가로 여백
  * @param marginVertical 세로 여백
+ * @param color 글자 색 (미지정 시 출판사 원본 색 유지)
+ * @param backgroundColor 배경 색 (미지정 시 출판사 원본 색 유지)
  */
 export type BookStyle = {
 	fontFamily: BookFontFamily;
@@ -34,6 +36,8 @@ export type BookStyle = {
 	lineHeight: number;
 	marginHorizontal: number;
 	marginVertical: number;
+	color?: string;
+	backgroundColor?: string;
 }
 
 /** 

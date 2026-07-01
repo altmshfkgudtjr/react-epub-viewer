@@ -15,7 +15,7 @@ import {
 // styles
 import viewerLayout, { contextmenuWidth } from 'lib/styles/viewerLayout'
 // types
-import { RootState } from 'slices'
+import { RootState, AppDispatch } from 'slices'
 import { BookStyle, BookFlow } from 'types/book'
 import Page from 'types/page'
 import Selection from 'types/selection'
@@ -50,7 +50,7 @@ const useHighlight = (
 	bookStyle: BookStyle,
 	bookFlow: BookFlow
 ) => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const currentLocation = useSelector<RootState, Page>(state => state.book.currentLocation);
 	const highlights = useSelector<RootState, Highlight[]>(state => state.book.highlights);
 

@@ -18,7 +18,9 @@ export type RootState = ReturnType<typeof reducer>
  * 공통 Store
  */
 const store = configureStore({
-	reducer,	
+	reducer,
 });
+
+export type AppDispatch = typeof store.dispatch
 
 export default store

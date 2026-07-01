@@ -15,7 +15,8 @@ import ViewerWrapper from 'components/commons/ViewerWrapper'
 import LoadingView from 'LoadingView'
 // slices
 import store from 'slices'
-import { updateBook, updateCurrentPage, updateToc } from 'slices/book'
+import { updateBook, updateCurrentPage, updateToc, clearHighlights } from 'slices/book'
+import { newSnackbar } from 'slices/snackbar'
 // hooks
 import useMenu from 'lib/hooks/useMenu'
 import useHighlight from 'lib/hooks/useHighlight'
@@ -23,7 +24,7 @@ import useHighlight from 'lib/hooks/useHighlight'
 import 'lib/styles/readerStyle.css'
 import viewerLayout from 'lib/styles/viewerLayout'
 // types
-import { RootState } from 'slices'
+import { RootState, AppDispatch } from 'slices'
 import { ViewerRef } from 'types'
 import Book, { BookStyle, BookOption } from 'types/book'
 import Page from 'types/page'
@@ -31,7 +32,7 @@ import Toc from 'types/toc'
 
 
 const Reader = ({ url, loadingView }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 	const currentLocation = useSelector<RootState, Page>(state => state.book.currentLocation);
   
 	const viewerRef = useRef<ViewerRef | any>(null);
@@ -132,6 +133,17 @@ const Reader = ({ url, loadingView }: Props) => {
 	/** ContextMenu off */
 	const onContextmMenuRemove = () => setIsContextMenu(false);
 
+	/** Remove every highlight at once (0.3.1 `offAllHighlight`) */
+	const onRemoveAllHighlights = () => {
+		const node = viewerRef.current;
+		if (node && node.offAllHighlight) node.offAllHighlight();
+		dispatch(clearHighlights());
+		dispatch(newSnackbar({
+			text: "All highlights removed!",
+			type: "INFO"
+		}));
+	};
+
 	
 	
   return (<>
@@ -182,10 +194,11 @@ const Reader = ({ url, loadingView }: Props) => {
 			ref={optionRef}
 		/>
 
-		<Learning 
+		<Learning
 			control={learningControl}
 			onToggle={onLearningToggle}
 			onClickHighlight={onClickHighlight}
+			onRemoveAllHighlights={onRemoveAllHighlights}
 			emitEvent={emitEvent}
 			viewerRef={viewerRef}
 			ref={learningRef}
