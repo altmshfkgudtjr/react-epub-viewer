@@ -30,6 +30,8 @@ import Book, { BookStyle, BookOption } from 'types/book'
 import Page from 'types/page'
 import Toc from 'types/toc'
 
+// Stable reference so the rendition-creation effect is not re-run every render.
+const epubViewerOptions = { allowScriptedContent: true };
 
 const Reader = ({ url, loadingView }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -154,11 +156,12 @@ const Reader = ({ url, loadingView }: Props) => {
 				onLearningToggle={onLearningToggle}
 			/>
 
-      <ReactEpubViewer 
+      <ReactEpubViewer
 				url={url}
 				viewerLayout={viewerLayout}
 				viewerStyle={bookStyle}
 				viewerOption={bookOption}
+				epubOptions={epubViewerOptions}
 				onBookInfoChange={onBookInfoChange}
 				onPageChange={onPageChange}
 				onTocChange={onTocChange}
