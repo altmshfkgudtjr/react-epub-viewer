@@ -129,7 +129,7 @@ You can also see the exported types for React-Epub-Viewer [here](https://github.
 
 - `url` - [string] - Epub file path
 - `epubFileOptions` - [[object](http://epubjs.org/documentation/0.3/#book)] Epub file option (Epub.js BookOption)
-- `epubOptions` - [[object](http://epubjs.org/documentation/0.3/#rendition)] Epub viewer option (Epub.js RenditionOption)
+- `epubOptions` - [[object](http://epubjs.org/documentation/0.3/#rendition)] Epub viewer option (Epub.js RenditionOption) _(set `allowScriptedContent: true` for interactive/scripted EPUBs — see [Interactive / scripted EPUBs](#interactive--scripted-epubs-allowscriptedcontent))_
 - `style` - [object] Epub wrapper style
 - `location` - [string] Epub [CFI](http://idpf.org/epub/linking/cfi/epub-cfi.html) or Spine href
 - `bookChanged` - [function]  Run when epub book changed
@@ -155,6 +155,37 @@ You can also see the exported types for React-Epub-Viewer [here](https://github.
 - `onTocChange ` - [function] Run when toc changed
 - `onSelection ` - [function] Run when selected
 - `loadingView` - [ReactNode] React Loading Component
+
+
+
+<br />
+
+
+
+## Interactive / scripted EPUBs (`allowScriptedContent`)
+
+Some EPUBs — for example interactive books exported from Adobe InDesign —
+embed `<script>` to drive buttons, animations, or section-to-section
+navigation. Epub.js renders the content iframe with `sandbox="allow-same-origin"`
+only, so those scripts are blocked and you'll see:
+
+> Blocked script execution in 'about:srcdoc' because the document's frame is
+> sandboxed and the 'allow-scripts' permission is not set.
+
+Opt in by forwarding `allowScriptedContent` through `epubOptions` (supported on
+both `EpubViewer` and `ReactEpubViewer`):
+
+```tsx
+<ReactEpubViewer
+  url="files/book.epub"
+  ref={ref}
+  epubOptions={{ allowScriptedContent: true }}
+/>
+```
+
+> ⚠️ **Security** — this executes arbitrary scripts bundled inside the EPUB.
+> Combined with `allow-same-origin`, that content can reach your app's origin,
+> so only enable it for **trusted** EPUB files. It is `false` by default.
 
 
 
