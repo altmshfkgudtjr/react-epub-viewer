@@ -389,4 +389,63 @@ describe('ReactEpubViewer (mocked epubjs)', () => {
     await waitFor(() => expect(MockBook.instances.length).toBe(1));
     expect(MockBook.instances[0].options).toMatchObject({ openAs: 'epub' });
   });
+
+  // Regression: passing an inline `epubOptions` object literal used to give a
+  // new reference every render, re-running the rendition effect and recreating
+  // the rendition on each render. That races the epubjs lifecycle and crashes
+  // rendering ("reading 'package'") so the book never loads (infinite loading).
+  it('does not recreate the rendition when epubOptions is an equal inline object', async () => {
+    const { rerender } = render(
+      <EpubViewer url="a.epub" ref={createRef()} epubOptions={{ allowScriptedContent: true }} />,
+    );
+    await waitFor(() =>
+      expect(MockBook.instances[0]?.renderTo).toHaveBeenCalledTimes(1),
+    );
+
+    // Re-render with a brand-new object of identical shape (simulates a parent
+    // re-render passing `{{ allowScriptedContent: true }}` again).
+    rerender(
+      <EpubViewer url="a.epub" ref={createRef()} epubOptions={{ allowScriptedContent: true }} />,
+    );
+    rerender(
+      <EpubViewer url="a.epub" ref={createRef()} epubOptions={{ allowScriptedContent: true }} />,
+    );
+
+    // No new Book, and the rendition was NOT recreated.
+    expect(MockBook.instances.length).toBe(1);
+    expect(MockBook.instances[0].renderTo).toHaveBeenCalledTimes(1);
+  });
+
+  it('recreates the rendition when epubOptions actually changes value', async () => {
+    const { rerender } = render(
+      <EpubViewer url="a.epub" ref={createRef()} epubOptions={{ allowScriptedContent: true }} />,
+    );
+    await waitFor(() =>
+      expect(MockBook.instances[0]?.renderTo).toHaveBeenCalledTimes(1),
+    );
+
+    rerender(
+      <EpubViewer url="a.epub" ref={createRef()} epubOptions={{ allowScriptedContent: false }} />,
+    );
+
+    await waitFor(() =>
+      expect(MockBook.instances[0].renderTo).toHaveBeenCalledTimes(2),
+    );
+  });
+
+  it('does not recreate the Book when epubFileOptions is an equal inline object', async () => {
+    const { rerender } = render(
+      <EpubViewer url="a.epub" ref={createRef()} epubFileOptions={{ openAs: 'epub' }} />,
+    );
+    await waitFor(() => expect(MockBook.instances.length).toBe(1));
+
+    rerender(
+      <EpubViewer url="a.epub" ref={createRef()} epubFileOptions={{ openAs: 'epub' }} />,
+    );
+    rerender(
+      <EpubViewer url="a.epub" ref={createRef()} epubFileOptions={{ openAs: 'epub' }} />,
+    );
+
+    expect(MockBook.instances.length).toBe(1);
+  });
 });
