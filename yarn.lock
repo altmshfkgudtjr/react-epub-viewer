@@ -980,10 +980,10 @@ react-dom@^18.3.1:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
 
-react-epub-viewer@^0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/react-epub-viewer/-/react-epub-viewer-0.3.2.tgz#b6535a2cc1eb2e704632f3a58c576f60e698ba12"
-  integrity sha512-Gkrba1uadrjbIUMUuESJiqgKEl5DoGgqZTjq0YzRudpBZPBUf5vTtMiNVU6dzqQwpRAYCjmdhfJNYJNzo5rzCQ==
+react-epub-viewer@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/react-epub-viewer/-/react-epub-viewer-0.3.4.tgz#a487dbd91028c6a41745eca656f915c7b94aa1eb"
+  integrity sha512-WUJ3ixSvyfuscflxshfCGXf1J6Qvf8+wEdbyPbkYnj/E3XYcYAovMUvRyMqOacw9WQZfuoK9A/fWcjGg5JEGcw==
   dependencies:
     epubjs "0.3.93"
 
