@@ -8,6 +8,8 @@ import React, {
 import { Book, Rendition } from 'epubjs';
 // style
 import styles from 'modules/epubViewer/styles';
+// hooks
+import { useStableValue } from 'lib/hooks/useStableValue';
 // types
 import { EpubViewerProps, ViewerRef } from 'types';
 import Loc from 'types/loc';
@@ -32,8 +34,8 @@ import Loc from 'types/loc';
 const EpubViewer = (
   {
     url,
-    epubFileOptions,
-    epubOptions,
+    epubFileOptions: epubFileOptionsProp,
+    epubOptions: epubOptionsProp,
     style,
     location,
     bookChanged,
@@ -45,6 +47,13 @@ const EpubViewer = (
   }: EpubViewerProps,
   ref: React.ForwardedRef<ViewerRef>,
 ) => {
+  // Keep option objects referentially stable so that passing an inline literal
+  // (e.g. `epubOptions={{ allowScriptedContent: true }}`) does not re-run the
+  // book/rendition effects on every render. Recreating the rendition on each
+  // render races the epubjs lifecycle and can crash rendering ("Cannot read
+  // properties of undefined (reading 'package')") → the book never loads.
+  const epubFileOptions = useStableValue(epubFileOptionsProp);
+  const epubOptions = useStableValue(epubOptionsProp);
   /**
    * This component requires an object ref (not a callback ref) because it both
    * forwards the ref to the wrapper element and augments `ref.current` with

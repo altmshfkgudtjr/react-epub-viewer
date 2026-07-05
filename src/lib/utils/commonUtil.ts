@@ -213,6 +213,41 @@ export const getSelectionPosition = (
 };
 
 /**
+ * Structural (deep) equality for plain values.
+ *
+ * Used to keep option objects (`epubOptions` / `epubFileOptions`) referentially
+ * stable across renders: two object literals with the same contents are treated
+ * as equal so effects keyed on them do not re-run. Functions and other
+ * non-plain values are compared by reference (`Object.is`).
+ * @param a First value
+ * @param b Second value
+ */
+export const deepEqual = (a: unknown, b: unknown): boolean => {
+  if (Object.is(a, b)) return true;
+  if (
+    typeof a !== 'object' ||
+    typeof b !== 'object' ||
+    a === null ||
+    b === null
+  ) {
+    return false;
+  }
+
+  const keysA = Object.keys(a as Record<string, unknown>);
+  const keysB = Object.keys(b as Record<string, unknown>);
+  if (keysA.length !== keysB.length) return false;
+
+  return keysA.every(
+    key =>
+      Object.prototype.hasOwnProperty.call(b, key) &&
+      deepEqual(
+        (a as Record<string, unknown>)[key],
+        (b as Record<string, unknown>)[key],
+      ),
+  );
+};
+
+/**
  * Debounce
  * @param func Target function
  * @param timeout delay
