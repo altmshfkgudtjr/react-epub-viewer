@@ -95,48 +95,38 @@ export const getParagraphCfi = (cfiRange: string) => {
  * @returns HTML Element or Null
  */
 export const getNodefromCfi = (cfi: string): HTMLElement | null => {
-  const epubcfi = cfi.slice(8, -1);
-
-  /* Remove Id */
-  const pureCfi = epubcfi.replace(/\[.*?\]/gi, '');
-
-  /* Only CFI Base */
-  const splitCfi = pureCfi.split('!');
-  if (splitCfi.length < 1 || splitCfi[1] === '') {
-    return null;
-  }
-
-  /* Remove Body tag CFI */
-  const cfiPath: number[] = splitCfi[1]
-    .split('/')
-    .slice(2)
-    .map(x => Number(x));
-
   const iframe = document.querySelector('iframe');
   if (!iframe) return null;
 
-  const iframeBody = iframe.contentWindow && iframe.contentWindow.document.body;
-  if (!iframeBody) return null;
+  const doc = iframe.contentWindow && iframe.contentWindow.document;
+  if (!doc) return null;
 
-  let component: HTMLElement | null = iframeBody;
+  // Resolve the CFI through epubjs' own parser instead of walking `childNodes`
+  // by hand. The previous traversal indexed `childNodes` (text nodes included)
+  // as `child[idx - 1]`, which only lined up when a whitespace text node
+  // happened to sit before each element. Tightly-nested markup with no such
+  // sibling — e.g. `<div class="title"><h1>…</h1></div>` on a title page — made
+  // it overshoot to a non-existent sibling and return null. Consumers that gate
+  // highlight rendering on this node (`if (!getNodefromCfi(...)) return;`) then
+  // silently skipped drawing the highlight on headings/titles even though it
+  // was registered, which is the root cause of #24. epubjs indexes element
+  // steps against element-only children, so it is unaffected by whitespace.
+  try {
+    const range = new EpubCFI(cfi).toRange(doc);
+    if (!range) return null;
 
-  /* Find Node based on CFI */
-  for (let idx of cfiPath) {
-    const childNodes: any = component && component.childNodes;
-
-    /* Bookmark / Highlight filtering.. */
-    const filtered = [...childNodes].filter(
-      n => !n.dataset || !n.dataset.bookmark || !n.dataset.highlight,
-    );
-    component = filtered[idx - 1];
-
-    if (!component) {
-      component = null;
-      break;
-    }
+    // A CFI that terminates at a text node resolves to that text node; return
+    // its owning element so callers always receive an HTMLElement.
+    const node = range.startContainer;
+    const element =
+      node.nodeType === Node.TEXT_NODE
+        ? node.parentElement
+        : (node as HTMLElement);
+    return element ?? null;
+  } catch {
+    /* Malformed CFI or node not on the current page */
+    return null;
   }
-
-  return component;
 };
 
 /**
